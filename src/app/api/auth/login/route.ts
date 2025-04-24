@@ -1,10 +1,31 @@
+import { createClient } from "@/supabase-connection/server";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-    try {
-        
-    } catch (error) {
-        console.error(error);
-        return NextResponse.json({msg: "Unexpected error occurred"}, {status: 500})
-    }
+  try {
+    const { email, password } = await req.json();
+
+    if (!email || !password)
+      return NextResponse.json(
+        { msg: "Unexpected error occurred" },
+        { status: 500 }
+      );
+
+    const supabase = await createClient();
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: email,
+      password: password,
+    });
+
+    if (error) throw error;
+
+    return NextResponse.json({ msg: "Successful Login" });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { msg: "Unexpected error occurred" },
+      { status: 500 }
+    );
+  }
 }
