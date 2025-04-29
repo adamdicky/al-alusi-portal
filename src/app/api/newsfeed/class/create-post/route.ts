@@ -1,28 +1,25 @@
-import { createClient } from "@/supabase-connection/server";
+import { authorized } from "@/utils/functions/auth";
+import { createClient } from "@/utils/supabase-connection/server";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-    try {
-            const {author_id, title, content} = await req.json();
+	try {
+		const user = await authorized("teacher");
 
-            if (!author_id || !title || !content) return NextResponse.json({msg: "Some fields are missing"}, {status: 400});
+		if (!user) return NextResponse.json({ msg: "Unauthorized" }, { status: 401 });
 
-            const supabase = await createClient();
+		const { author_id, title, content } = await req.json();
 
-            // const { data, error } = await supabase.auth.signInWithPassword({
-            //     email: 'example@email.com',
-            //     password: 'example-password',
-            //   })
+		if (!author_id || !title || !content) return NextResponse.json({ msg: "Some fields are missing" }, { status: 400 });
 
-            const { data, error } = await supabase
-                .from('posts')
-                .insert({author_id, title, content})
-                .select()
+		const supabase = await createClient();
 
-            if (error) throw error;
-            return NextResponse.json(data)
-        } catch (error) {
-        console.error(error)
-        return NextResponse.json({msg: "Unexpected error occurred"}, {status: 500})
-    }
+		const { data, error } = await supabase.from("posts").insert({ author_id, title, content }).select();
+
+		if (error) throw error;
+		return NextResponse.json(data);
+	} catch (error) {
+		console.error(error);
+		return NextResponse.json({ msg: "Unexpected error occurred" }, { status: 500 });
+	}
 }
