@@ -1,27 +1,37 @@
-import { createClient } from "@/supabase-connection/server";
+import { authorized } from "@/utils/functions/auth";
+import { createClient } from "@/utils/supabase-connection/server";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-    try {
-            const {id} = await req.json();
+  try {
+    const user = await authorized("teacher");
 
-            if (!id) return NextResponse.json({msg: "Post does not exist."}, {status: 400});
+    if (!user)
+      return NextResponse.json({ msg: "Unauthorized" }, { status: 401 });
 
-            const supabase = await createClient();
+    const { id } = await req.json();
 
-            // const { data, error } = await supabase
-            //     .from('posts')
-            //     .insert({author_id, title, content})
+    if (!id)
+      return NextResponse.json(
+        { msg: "Post does not exist." },
+        { status: 400 }
+      );
 
-            const { error} = await supabase
-                .from('posts')
-                .delete()
-                .eq('id', id)
+    const supabase = await createClient();
 
-            if (error) throw error;
-            return NextResponse.json({msg: "Successfully deleted post."})
-        } catch (error) {
-        console.error(error)
-        return NextResponse.json({msg: "Unexpected error occurred"}, {status: 500})
-    }
+    // const { data, error } = await supabase
+    //     .from('posts')
+    //     .insert({author_id, title, content})
+
+    const { error } = await supabase.from("posts").delete().eq("id", id);
+
+    if (error) throw error;
+    return NextResponse.json({ msg: "Successfully deleted post." });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { msg: "Unexpected error occurred" },
+      { status: 500 }
+    );
+  }
 }
