@@ -9,8 +9,11 @@ export default function Home() {
     <>
     <div className="flex flex-col min-h-screen">
       <main className="flex-grow">
-        <div className="flex flex-col bg-white p-4 my-10 w-[1200px] mx-auto rounded-2xl border border-gray-200 wrap-break-word ">
+        <div className="flex flex-col bg-white p-4 my-10 mx-88 rounded-2xl border border-gray-200 ">
         
+        {/* w-[1200px] mx-auto */}
+
+        {/* mx-88 */}
         <div className="flex flex-row justify-between ">
           <div className="flex flex-row gap-2">
             <h6 className="font-bold">1USM Newsfeed</h6>
@@ -32,7 +35,7 @@ export default function Home() {
         
         {/* BREAK HERE, COMPONENT STARTS BELOW*/}
 
-        <div className="flex flex-col items-center p-4 gap-7">
+        <div className="flex flex-col items-center py-4 gap-7">
           <Post/>
           <Post/>
           <Post/>

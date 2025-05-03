@@ -4,7 +4,8 @@ import Image from 'next/image';
 
 const Post = () => {
   return (
-    <div className="flex flex-col bg-white p-3 gap-3 w-[1170px]  rounded-2xl border border-gray-200 wrap-break-word">
+    <div className="flex flex-col bg-white p-3 gap-3 rounded-2xl border border-gray-200">
+        {/* w-[1170px] */}
         <div className='flex flex-row items-center gap-2'>
             <User size={32}/>
             <div>
