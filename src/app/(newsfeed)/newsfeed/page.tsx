@@ -21,6 +21,7 @@ export default function Home() {
               type="button"
               title="Class:"
               icon='/caret-down.svg'
+              className="text-black"
 
             />
           </div>
@@ -29,6 +30,7 @@ export default function Home() {
               type="button"
               title="Date"
               icon='/caret-down.svg'
+              className="text-black"
             />
           </div>
         </div>
