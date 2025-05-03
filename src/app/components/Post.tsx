@@ -1,5 +1,6 @@
 import React from 'react'
 import { User } from "@phosphor-icons/react/dist/ssr";
+import Image from 'next/image';
 
 const Post = () => {
   return (
@@ -19,6 +20,20 @@ const Post = () => {
               Pasukan bola baling lelaki SIRAJ Al-Alusi berjaya melangkah ke suku akhir selaku naib johan kumpulan. Walaupun tidak berjaya mara ke separuh akhir, pasukan menunjukkan semangat dan kesungguhan yang membanggakan di setiap perlawanan. Teruskan berlatih dan jangan berhenti mencabar potensi diri dan perjalanan masih panjang. Good games, guys! Bola Baling ini dilatih oleh cikgu SIRAJ Al-Alusi, Cikgu Ezatul A'in Artikah dan pengurus pasukan ialah Cikgu Nur Atikah. Syabas semuanya!
             </a>
         </div>
+
+        {/* PICTURE STARTS BELOW */}
+
+        <div className='relative w-full h-60 overflow-hidden rounded-xl'>
+          <Image
+            src='/example pic siraj al alusi.jpg'
+            alt='example pic'
+            fill
+            // width={1170}
+            // height={1000}
+            className='object-cover rounded-xl'
+          />
+        </div>
+       
     </div>
   )
 }
