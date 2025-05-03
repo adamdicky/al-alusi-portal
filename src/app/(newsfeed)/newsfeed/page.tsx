@@ -1,6 +1,7 @@
 import Button from "@/app/components/Button";
 import Navbar from "@/app/components/Navbar";
 import Post from "@/app/components/Post";
+import DeletePost from "@/app/components/DeletePost";
 // import { User  } from "@phosphor-icons/react";
 
 
