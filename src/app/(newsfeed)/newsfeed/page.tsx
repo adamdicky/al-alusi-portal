@@ -12,7 +12,7 @@ export default function Home() {
         <div className="flex flex-col bg-white p-4 my-10 sm:mx-12 md:mx-20 lg:mx-40 xl:mx-60 2xl:mx-88 rounded-2xl border border-gray-200 ">
         
         {/* w-[1200px] mx-auto */}
-
+        {/* test */}
         {/* mx-88 */}
         <div className="flex flex-row justify-between ">
           <div className="flex flex-row gap-2">
