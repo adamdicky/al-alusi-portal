@@ -8,7 +8,7 @@ import { Icon, IconProps, SpinnerGap } from "@phosphor-icons/react";
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 	text: string;
 	customLoadingState?: boolean;
-	color?: "dark" | "off-white" | "white" | "border-white" | "danger";
+	color?: "dark-blue" | "off-white" | "border-white";
 	iconName?: keyof typeof PhosphorIcons;
 	iconSize?: number;
 	iconWeight?: IconProps["weight"];
@@ -52,16 +52,12 @@ export default function Button({
 			{...props}
 			onClick={handleOnClick}
 			className={`${
-				color === "dark"
-					? "bg-dark text-white"
+				color === "dark-blue"
+					? "bg-dark-blue text-white"
 					: color === "off-white"
 					? "bg-off-white text-black"
-					: color === "white"
-					? "bg-white text-black"
 					: color === "border-white"
 					? "bg-white text-black"
-					: color === "danger"
-					? "bg-danger text-white"
 					: ""
 			} ${color === "off-white" || color === "border-white" ? "border-dark" : "border-transparent"} ${
 				iconSide === "left" ? "flex-row" : "flex flex-row-reverse"
@@ -71,34 +67,14 @@ export default function Button({
 				<Icon
 					size={iconSize}
 					weight={iconWeight}
-					className={`${
-						color === "dark"
-							? "text-white"
-							: color === "off-white"
-							? " text-black"
-							: color === "white"
-							? "text-black"
-							: color === "danger"
-							? "text-white"
-							: ""
-					}`}
+					className={`${color === "dark-blue" ? "text-white" : color === "off-white" ? " text-black" : ""}`}
 				/>
 			)}
 			{loading ? (
 				<SpinnerGap
 					size={20}
 					weight="bold"
-					className={`${
-						color === "dark"
-							? "text-white"
-							: color === "off-white"
-							? " text-black"
-							: color === "white"
-							? "text-black"
-							: color === "danger"
-							? "text-white"
-							: ""
-					} animate-spin`}
+					className={`${color === "dark-blue" ? "text-white" : color === "off-white" ? " text-black" : ""} animate-spin`}
 				/>
 			) : (
 				<p className="text-nowrap">{text}</p>

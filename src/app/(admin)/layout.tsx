@@ -28,13 +28,13 @@ export default function RootLayout({
 					</div>
 
 					<ul className="w-full space-y-3 text-black ">
-						<li className="flex flex-row items-center gap-3 rounded-xs py-1 px-1.5  hover:bg-light-gray">
+						<li className="flex flex-row items-center gap-3 rounded-xs py-1 px-1.5  hover:bg-off-white">
 							<Newspaper size={24} className="text-black" />
 							<Link href={"/admin/dashboard/newsfeed"} className="w-full text-left">
 								Newsfeed Management
 							</Link>
 						</li>
-						<li className="flex flex-row items-center gap-3 rounded-xs py-1 px-1.5  hover:bg-light-gray">
+						<li className="flex flex-row items-center gap-3 rounded-xs py-1 px-1.5  hover:bg-off-white">
 							<Users size={24} className="text-black" />
 							<Link href={"/admin/dashboard/newsfeed"} className="w-full text-left">
 								User Management
