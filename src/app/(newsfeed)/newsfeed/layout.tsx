@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
+import Navbar from "@/components/Navbar";
 import { Poppins, Instrument_Sans } from "next/font/google";
 import "./globals.css";
 
-import Footer from "@/app/components/Footer";
-
-
+import Footer from "@/components/Footer";
 
 const poppins = Poppins({ subsets: ["latin"], weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"], variable: "--font-p" });
 
@@ -20,11 +19,13 @@ export default function RootLayout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-
 	return (
 		<html lang="en">
-			<body className={`${poppins.variable} ${instrumentSans.variable} antialiased`}>{children}</body>
+			<body className={`${poppins.variable} ${instrumentSans.variable} antialiased`}>
+				<Navbar />
+				{children}
+				<Footer />
+			</body>
 		</html>
 	);
-
 }
