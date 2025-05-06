@@ -1,3 +1,4 @@
+import DeletePost from "@/app/components/DeletePost";
 import Button from "@/components/Button";
 import Navbar from "@/components/Navbar";
 import Post from "@/components/Post";
