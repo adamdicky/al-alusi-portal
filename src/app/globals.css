@@ -3,6 +3,7 @@
 @theme {
 	--color-off-white: #f1f1f1;
 	--color-dark-blue: #043251;
+	--color-danger: #b3261e;
 }
 
 * {
@@ -58,4 +59,8 @@ h4 {
 
 h5 {
 	font-size: 1.25rem;
+}
+
+button {
+	cursor: pointer;
 }
