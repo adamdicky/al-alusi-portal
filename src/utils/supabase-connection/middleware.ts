@@ -33,7 +33,14 @@ export async function updateSession(request: NextRequest) {
 
 	const pathname = request.nextUrl.pathname;
 	//? User not authenticated
-	if (!user && !pathname.startsWith("/accounts/create-account") && pathname !== "/") {
+	if (
+		!user &&
+		!pathname.startsWith("/admin/login") &&
+		!pathname.startsWith("/api/auth/create-user") &&
+		!pathname.startsWith("/api/auth/login") &&
+		!pathname.startsWith("/api/auth/confirm-email") &&
+		pathname !== "/"
+	) {
 		console.log("Not Authenticated... re-routing");
 
 		const url = request.nextUrl.clone();
@@ -42,11 +49,11 @@ export async function updateSession(request: NextRequest) {
 	}
 
 	//? User Authenticated
-	if (user && pathname.startsWith("/accounts/create-account")) {
+	if (user && pathname.startsWith("/admin/login")) {
 		console.log("Authenticated... re-routing");
 
 		const url = request.nextUrl.clone();
-		url.pathname = "/";
+		url.pathname = "/newsfeed/school";
 		return NextResponse.redirect(url);
 	}
 

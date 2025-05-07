@@ -25,6 +25,8 @@ export default function page() {
 				}),
 			});
 
+			console.log(url);
+
 			router.push(url);
 		} catch (error) {
 			console.error(error);

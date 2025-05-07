@@ -16,6 +16,8 @@ export async function POST(req: NextRequest) {
 
 		if (error) throw error;
 
+		console.log(new URL("/admin/dashboard/newsfeed-management", req.nextUrl));
+
 		return NextResponse.redirect(new URL("/admin/dashboard/newsfeed-management", req.nextUrl));
 	} catch (error) {
 		console.error(error);
