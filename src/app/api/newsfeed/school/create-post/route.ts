@@ -1,5 +1,3 @@
-// src/app/api/newsfeed/school/create-post/route.ts
-
 import { authorized } from "@/utils/functions/auth";
 import { createClient } from "@/utils/supabase-connection/server";
 import { NextRequest, NextResponse } from "next/server";
@@ -10,18 +8,18 @@ export async function POST(req: NextRequest) {
 
 		if (!user) return NextResponse.json({ msg: "Unauthorized" }, { status: 401 });
 
-		const body = await req.json();
-		const { title, description, images, authorId } = body;
+		const { title, description, images } = await req.json();
 
-		if (!title || !description || !images || !authorId) {
-			return NextResponse.json({ error: "Missing fields" }, { status: 400 });
+		if (!title || !description || !images) {
+			return NextResponse.json({ msg: "Missing fields" }, { status: 400 });
 		}
 		const supabase = await createClient();
-		const { data, error } = await supabase.from("countries").insert({ title, content: description, author_id: authorId }).select();
+		const { data, error } = await supabase.from("school_posts").insert({ title, content: description, author_id: user.id }).select();
 
 		if (error) throw error;
-		return NextResponse.json({ message: "Post created", post: data }, { status: 201 });
+		return NextResponse.json(data, { status: 201 });
 	} catch (err) {
-		return NextResponse.json({ error: "Unexpected Error Occured" }, { status: 500 });
+		console.error(err);
+		return NextResponse.json({ msg: "Unexpected error occurred" }, { status: 500 });
 	}
 }

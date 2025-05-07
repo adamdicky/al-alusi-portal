@@ -4,6 +4,7 @@ import { ButtonHTMLAttributes, useEffect, useState } from "react";
 
 import * as PhosphorIcons from "@phosphor-icons/react/dist/ssr";
 import { Icon, IconProps, SpinnerGap } from "@phosphor-icons/react";
+import { cn } from "@/utils/functions/clsx";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 	text: string;
@@ -17,7 +18,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 export default function Button({
 	text,
-	color,
+	color = "dark-blue",
 	customLoadingState,
 	iconName,
 	iconSize = 18,
@@ -51,17 +52,20 @@ export default function Button({
 		<button
 			{...props}
 			onClick={handleOnClick}
-			className={`${
-				color === "dark-blue"
-					? "bg-dark-blue text-white"
-					: color === "off-white"
-					? "bg-off-white text-black"
-					: color === "border-white"
-					? "bg-white text-black"
-					: ""
-			} ${color === "off-white" || color === "border-white" ? "border-dark" : "border-transparent"} ${
-				iconSide === "left" ? "flex-row" : "flex flex-row-reverse"
-			} ${className} flex items-center justify-center px-4 py-2 border-2 rounded-[4px] font-medium gap-2 transition-transform duration-300 hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed`}
+			className={cn(
+				`${
+					color === "dark-blue"
+						? "bg-dark-blue text-white"
+						: color === "off-white"
+						? "bg-off-white text-black"
+						: color === "border-white"
+						? "bg-white text-black"
+						: ""
+				} ${color === "off-white" || color === "border-white" ? "border-dark" : "border-transparent"} ${
+					iconSide === "left" ? "flex-row" : "flex flex-row-reverse"
+				} flex items-center justify-center px-4 py-2 border-2 rounded-[4px] font-medium gap-2 transition-transform duration-300 cursor-pointer hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed`,
+				className
+			)}
 		>
 			{iconName && (
 				<Icon

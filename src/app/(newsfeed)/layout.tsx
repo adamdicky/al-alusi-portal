@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import { Poppins, Instrument_Sans } from "next/font/google";
-import "./globals.css";
+import "@/app/globals.css";
 
 import Footer from "@/components/Footer";
 

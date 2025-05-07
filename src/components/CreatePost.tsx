@@ -1,16 +1,31 @@
 "use client";
 
 import { useState } from "react";
+
 import { UploadSimple, X } from "@phosphor-icons/react";
-import React from "react";
 import Input from "@/components/ui/input";
 import Textarea from "@/components/ui/textarea";
 import Button from "@/components/Button";
+
+import { apiFetch } from "@/utils/functions/fetch";
 
 export default function CreatePost({ close }: { close: () => void }) {
 	const [title, setTitle] = useState<string>("");
 	const [description, setDescription] = useState<string>("");
 	const [images, setImages] = useState<FileList | null>(null);
+
+	async function createPost() {
+		try {
+			await apiFetch("/api/newsfeed/school/create-post", {
+				method: "POST",
+				body: JSON.stringify({ title, description, images: images ? images : "none" }),
+			});
+
+			close();
+		} catch (error) {
+			console.error(error);
+		}
+	}
 
 	const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setImages(e.target.files);
@@ -23,7 +38,6 @@ export default function CreatePost({ close }: { close: () => void }) {
 					<X size="18" weight="bold" className="text-black" />
 				</button>
 				<div className="p-4 rounded-lg border border-gray-200">
-					{/* Profile section */}
 					<div className="flex flex-col mb-6">
 						<div className="flex items-center space-x-3">
 							<div className="w-10 h-10 rounded-full bg-gray-300" />
@@ -34,7 +48,6 @@ export default function CreatePost({ close }: { close: () => void }) {
 						</div>
 					</div>
 
-					{/* Title input */}
 					<div className="mb-4">
 						<label className="block text-sm font font-medium text-black mb-1">Title</label>
 						<Input
@@ -46,7 +59,6 @@ export default function CreatePost({ close }: { close: () => void }) {
 						/>
 					</div>
 
-					{/* Description Input */}
 					<div className="mb-4">
 						<label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
 						<Textarea
@@ -58,7 +70,6 @@ export default function CreatePost({ close }: { close: () => void }) {
 						/>
 					</div>
 
-					{/* Custom Image Upload Box */}
 					<div className="mb-6">
 						<label className="block text-sm font-medium text-gray-700 mb-2">Attach Images</label>
 						<div className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-200 rounded-md cursor-pointer hover:border-gray-400 focus:border-gray-400">
@@ -68,8 +79,7 @@ export default function CreatePost({ close }: { close: () => void }) {
 						</div>
 					</div>
 
-					{/* Post button */}
-					<Button text="Post" color="dark-blue" className="block ml-auto" />
+					<Button text="Post" onClick={createPost} color="dark-blue" className="block ml-auto" />
 				</div>
 			</div>
 		</div>
