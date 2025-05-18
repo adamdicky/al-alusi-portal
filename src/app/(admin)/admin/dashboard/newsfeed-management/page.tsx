@@ -33,6 +33,8 @@ export default function page() {
 	const [showPost, setShowPost] = useState<Tables<"school_posts" | "class_posts"> | null>(null);
 	const [showCreatePost, setShowCreatePost] = useState<boolean>(false);
 	const [schoolNewsfeed, setSchoolNewsfeed] = useState<Tables<"school_posts">[]>();
+	const [pendingPosts, setPendingPosts] = useState<Tables<"class_posts">[]>([]); //for pending posts
+	const [approvedPosts, setApprovedPosts] = useState<Tables<"class_posts">[]>([]); //for approved posts
 
 	useEffect(() => {
 		async function getPosts() {
@@ -47,6 +49,32 @@ export default function page() {
 			}
 		}
 
+		async function getPendingPosts() {
+			try {
+				const data = await apiFetch("/api/admin/get-pending-posts", {
+					method: "GET",
+				});
+				setPendingPosts(data);
+			} catch (error) {
+				console.error(error);
+			}
+		}
+
+		async function getApprovedPosts() {
+			try {
+				const data = await apiFetch("/api/admin/get-latest-approved-posts", {
+					method: "GET",
+				});
+				setApprovedPosts(data);
+			} catch (error) {
+				console.error(error);
+			}
+		}
+
+		console.log("Pending Posts Data:", pendingPosts);
+
+		getApprovedPosts();
+		getPendingPosts();
 		getPosts();
 	}, []);
 
@@ -55,7 +83,7 @@ export default function page() {
 			<div className="flex flex-col justify-between w-full space-y-2">
 				<h5 className="font-semibold">Pending Newsfeed Approvals</h5>
 				<div className="flex flex-col items-center gap-3 h-64 bg-off-white border border-gray-200 p-2 rounded-lg overflow-y-auto">
-					<div className="flex flex-row items-center justify-between bg-white border border-gray-200 px-3 py-1.5 rounded-md w-full">
+					{/* <div className="flex flex-row items-center justify-between bg-white border border-gray-200 px-3 py-1.5 rounded-md w-full">
 						<h6 className="font-medium">Class 1-USM</h6>
 						<div className="flex flex-row items-center gap-1.5 text-gray-500 text-sm">
 							<p>Feb 06</p>
@@ -64,9 +92,11 @@ export default function page() {
 								view
 							</button>
 						</div>
-					</div>
+					</div> */}
+					{pendingPosts && pendingPosts?.map((post) => <PostListItem key={post.id} post={post} showPost={setShowPost} />)}
 				</div>
 			</div>
+			
 			<div className="flex flex-col justify-between w-full space-y-2">
 				<div className="flex flex-row items-center justify-between">
 					<h5 className="font-semibold">Published School Newsfeed</h5>
@@ -83,10 +113,12 @@ export default function page() {
 					{schoolNewsfeed && schoolNewsfeed?.map((post) => <PostListItem key={post.id} post={post} showPost={setShowPost} />)}
 				</div>
 			</div>
+
+
 			<div className="col-span-2 space-y-2">
 				<h5 className="font-semibold">Recently Approved Newsfeed</h5>
 				<div className="flex flex-col items-center gap-3 h-64 bg-off-white border border-gray-200 p-2 rounded-lg overflow-y-auto">
-					<div className="flex flex-row items-center justify-between bg-white border border-gray-200 px-3 py-1.5 rounded-md w-full">
+					{/* <div className="flex flex-row items-center justify-between bg-white border border-gray-200 px-3 py-1.5 rounded-md w-full">
 						<h6 className="font-medium">Show & tell on 16 March</h6>
 						<div className="flex flex-row items-center gap-1.5 text-gray-500 text-sm">
 							<p>Feb 06</p>
@@ -96,7 +128,8 @@ export default function page() {
 								view
 							</button>
 						</div>
-					</div>
+					</div> */}
+					{approvedPosts && approvedPosts?.map((post) => <PostListItem key={post.id} post={post} showPost={setShowPost} />)}
 				</div>
 			</div>
 			{showCreatePost && <CreatePost close={() => setShowCreatePost(false)} />}
