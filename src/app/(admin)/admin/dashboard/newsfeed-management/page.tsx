@@ -53,7 +53,7 @@ export default function page() {
 	return (
 		<main className="col-span-4 grid grid-cols-2 grid-rows-2 grid-flow-row gap-4 p-4 bg-white border border-gray-200 rounded-lg">
 			<div className="flex flex-col justify-between w-full space-y-2">
-				<h5 className="font-semibold">Pending Newsfeed approvals</h5>
+				<h5 className="font-semibold">Pending Newsfeed Approvals</h5>
 				<div className="flex flex-col items-center gap-3 h-64 bg-off-white border border-gray-200 p-2 rounded-lg overflow-y-auto">
 					<div className="flex flex-row items-center justify-between bg-white border border-gray-200 px-3 py-1.5 rounded-md w-full">
 						<h6 className="font-medium">Class 1-USM</h6>
