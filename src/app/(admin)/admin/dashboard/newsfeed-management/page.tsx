@@ -7,6 +7,7 @@ import CreatePost from "@/components/CreatePost";
 import { Tables } from "@/types/supabase/public.types";
 import { apiFetch } from "@/utils/functions/fetch";
 import DeletePost from "@/components/DeletePost";
+import CreateUser from "@/components/CreateUser";
 
 function PostListItem({
 	post,
@@ -24,6 +25,7 @@ function PostListItem({
 				<button type="button" onClick={() => showPost(post)} className="underline font-semibold ml-3">
 					view
 				</button>
+				<CreateUser close={() => {}} />
 			</div>
 		</div>
 	);
