@@ -21,7 +21,7 @@ const OpenPost = ({ post, close }: { post: Tables<"school_posts" | "class_posts"
         }
 
         try {
-            await apiFetch(`/api/newsfeed/class/create-remark`, {
+            await apiFetch(`/api/admin/create-remark`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -61,9 +61,9 @@ const OpenPost = ({ post, close }: { post: Tables<"school_posts" | "class_posts"
                     <X size="18" weight="bold" className="text-black" />
                 </button>
 				
-                <div className="bg-amber-800 flex flex-row border border-gray-200 rounded-md p-4 space-y-6">
+                <div className="flex flex-row border border-gray-200 rounded-md p-4 space-y-6">
                   
-				   <div className=" bg-amber-200 flex flex-col gap-4 p-3">
+				   <div className="flex flex-col gap-4 p-3 mb-0">
 						{/* Content */}
 						<div className="flex flex-row items-center gap-2 w-full">
 							<User size={32} />
@@ -99,7 +99,7 @@ const OpenPost = ({ post, close }: { post: Tables<"school_posts" | "class_posts"
 					<div>
 						 {/* Remark Text Field */}
 						<textarea 
-							className="w-[190px] h-full border border-gray-300 rounded-md p-2" 
+							className="w-[190px] h-full border border-gray-300 rounded-md p-2 " 
 							placeholder="Type your remark here..." 
 							value={remarkText} 
 							onChange={(e) => setRemarkText(e.target.value)}
@@ -110,8 +110,8 @@ const OpenPost = ({ post, close }: { post: Tables<"school_posts" | "class_posts"
 
                 {/* Action Buttons */}
                 <div className="flex justify-end gap-2">
-                    <Button text="Make Remark" color="danger" onClick={makeRemark} className="font-semibold text-sm" />
-                    <Button text="Approve" color="danger" onClick={(e) => updateStatus(e, "approved")} className="font-semibold text-sm" />
+                    <Button text="Make Remark"  onClick={makeRemark} className="font-semibold text-sm bg-yellow-500 text-white" />
+                    <Button text="Approve" color="dark-blue" onClick={(e) => updateStatus(e, "approved")} className="font-semibold text-sm" />
                     <Button text="Reject" color="danger" onClick={(e) => updateStatus(e, "rejected")} className="font-semibold text-sm" />
                 </div>
             </div>

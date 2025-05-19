@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
         const {error: updateError} = await supabase
             .from("class_posts")
             .update({ status: "remark" }) //update status to remark
-            .eq("post_id", post_id);
+            .eq("id", post_id);
 
         if (updateError) throw updateError;
 
