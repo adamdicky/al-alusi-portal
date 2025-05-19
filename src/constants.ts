@@ -1,0 +1,21 @@
+export type Classroom = `${1 | 2 | 3 | 4 | 5 | 6}-${"UKM" | "UPM" | "USM"}`;
+export const classroomOptions: Classroom[] = [
+	"1-UKM",
+	"2-UKM",
+	"3-UKM",
+	"4-UKM",
+	"5-UKM",
+	"6-UKM",
+	"1-UPM",
+	"2-UPM",
+	"3-UPM",
+	"4-UPM",
+	"5-UPM",
+	"6-UPM",
+	"1-USM",
+	"2-USM",
+	"3-USM",
+	"4-USM",
+	"5-USM",
+	"6-USM",
+];

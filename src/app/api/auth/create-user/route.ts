@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
 			options: {
 				emailRedirectTo: `${process.env.NEXT_PUBLIC_URL}/api/auth/confirm-email`,
 				data:
-					role === "teacher"
+					role.name && role.name === "teacher"
 						? {
 								role: role.name,
 								class: role.class,
