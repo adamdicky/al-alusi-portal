@@ -1,28 +1,25 @@
+import { Tables } from "@/types/supabase/public.types";
 import { createClient } from "@/utils/supabase-connection/server";
+import { PostgrestResponse } from "@supabase/supabase-js";
 import { NextRequest, NextResponse } from "next/server";
-import { authorized } from "@/utils/functions/auth";
-
 
 export async function GET(req: NextRequest) {
-    try {
+  try {
+    const supabase = await createClient();
 
-        const user = await authorized("admin");
-        if (!user) return NextResponse.json({ msg: "Unauthorized" }, { status: 401 });
-        
-        const supabase = await createClient();
-        
-        const { data, error } = await supabase
-            .from("class_posts")
-            .select("class, created_at, author_id")
-            .eq("status", "approved")
-            .order("created_at", { ascending: false })
+    const { searchParams } = new URL(req.nextUrl);
+    const sort = searchParams.get("sort") || "desc";
 
-        if (error) throw error;
+    const { data, error }: PostgrestResponse<Tables<"class_posts">> = await supabase
+      .from("class_posts")
+      .select()
+      .eq("status", "approved")
+      .order("created_at", { ascending: sort === "asc" });
 
-        return NextResponse.json(data, { status: 200 });
-
-    } catch (err) {
-        console.error(err);
-        return NextResponse.json({ msg: "Unexpected error occurred." }, { status: 500 });
-    }
+    if (error) throw error;
+    return NextResponse.json(data);
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ msg: "Unexpected error occurred" }, { status: 500 });
+  }
 }

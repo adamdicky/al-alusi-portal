@@ -29,7 +29,7 @@ export async function PATCH(req: NextRequest) {
         const { data, error } = await supabase
             .from("class_posts")
             .update({status: action})
-            .eq("post_id", postId) 
+            .eq("id", postId) 
             .select();
         
         if (error) throw error;
