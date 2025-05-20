@@ -7,11 +7,11 @@ import { Tables } from "@/types/supabase/public.types";
 import Image from "next/image";
 import { apiFetch } from "@/utils/functions/fetch";
 
-const DeletePost = ({ post, close }: { post: Tables<"school_posts" | "class_posts">; close: () => void }) => {
+const DeletePost = ({ post, type, close }: { post: Tables<"school_posts" | "class_posts">; type: "school" | "class"; close: () => void }) => {
 	async function deletePost(e: React.MouseEvent<HTMLButtonElement>) {
 		e.preventDefault();
 		try {
-			const deletePost = await apiFetch(`/api/newsfeed/school/delete/${post.id}`, {
+			const deletePost = await apiFetch(`/api/newsfeed/${type}/delete/${post.id}`, {
 				method: "DELETE",
 			});
 

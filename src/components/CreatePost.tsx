@@ -9,14 +9,14 @@ import Button from "@/components/Button";
 
 import { apiFetch } from "@/utils/functions/fetch";
 
-export default function CreatePost({ close }: { close: () => void }) {
+export default function CreatePost({ type, close }: { type: "class_post" | "school_post"; close: () => void }) {
 	const [title, setTitle] = useState<string>("");
 	const [description, setDescription] = useState<string>("");
 	const [images, setImages] = useState<FileList | null>(null);
 
 	async function createPost() {
 		try {
-			await apiFetch("/api/newsfeed/school/create-post", {
+			await apiFetch(`/api/newsfeed/${type === "school_post" ? "school" : "class"}/create-post`, {
 				method: "POST",
 				body: JSON.stringify({ title, description, images: images ? images : "none" }),
 			});

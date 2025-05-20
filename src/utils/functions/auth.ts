@@ -9,7 +9,7 @@ export async function authorized(role: "admin" | "teacher" | "staff_jabatan") {
 		return false;
 	}
 
-	if (data.user.user_metadata.role === role) {
+	if (data.user.user_metadata.role === role || data.user.user_metadata.role.name === role) {
 		return data.user;
 	}
 	return false;
