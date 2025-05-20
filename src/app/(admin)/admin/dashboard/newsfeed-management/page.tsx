@@ -120,7 +120,7 @@ export default function page() {
 					{approvedPosts && approvedPosts?.map((post) => <PostListItem key={post.id} post={post} showPost={setShowPost} tableName="class_posts"/>)}
 				</div>
 			</div>
-			{showCreatePost && <CreatePost close={() => setShowCreatePost(false)} />}
+			{showCreatePost && <CreatePost close={() => setShowCreatePost(false)} postType="school_posts" />}
 			{showPost !== null && showPost.table_name === "school_posts" && (
 				<DeletePost post={showPost} close={() => setShowPost(null)} />
 			)}
