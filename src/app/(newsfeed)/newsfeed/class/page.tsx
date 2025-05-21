@@ -99,7 +99,7 @@ export default function Home() {
 						</div>
 
 						<div className="flex flex-col items-center py-4 gap-7">
-							{posts && posts.length > 0 ? posts.map((post) => <Post key={post.id} post={post} />) : <p>No posts available.</p>}
+							{posts && posts.length > 0 ? posts.map((post) => <Post key={post.id} post={post} />) : <p className="py-2 font-bold">No posts available.</p>}
 							{/* {posts ? posts.map((post) => <Post key={post.id} post={post} />) : "No posts available."} */}
 						</div>
 					</div>

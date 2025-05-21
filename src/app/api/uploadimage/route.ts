@@ -20,9 +20,9 @@ export async function POST(req: NextRequest) {
         const images_path: string[]= [];
 
         for (const file of files) {
-            const ext = file.name.split(".").pop();
+            const ext = file.name.split(".").pop() || "jpeg"; //just in case filename no extension
             const id = uuidv4();
-            const path = `${postType}/${id}/${ext}`;
+            const path = `${postType}/${id}.${ext}`;
 
             const { error } = await supabase
                 .storage
