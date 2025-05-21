@@ -16,7 +16,7 @@ function PostListItem({
 	tableName,
 }: {
 	post: Tables<"school_posts" | "class_posts">;
-	showPost: (x: null | Tables<"school_posts" | "class_posts"> & {table_name: "school_posts" | "class_posts"}) => void;
+	showPost: (x: null | (Tables<"school_posts" | "class_posts"> & { table_name: "school_posts" | "class_posts" })) => void;
 	tableName: "school_posts" | "class_posts";
 }) {
 	return (
@@ -25,12 +25,16 @@ function PostListItem({
 			<div className="flex flex-row items-center gap-1.5 text-gray-500 text-sm">
 				<p>{new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "short" }).format(new Date(post.created_at))}</p>
 				<p className="w-16 line-clamp-1">{post.author_id}</p>
-				<button type="button" onClick={() => 
+				<button
+					type="button"
+					onClick={() =>
 						showPost({
 							...post,
 							table_name: tableName,
 						})
-					} className="underline font-semibold ml-3">
+					}
+					className="underline font-semibold ml-3"
+				>
 					view
 				</button>
 				<CreateUser close={() => {}} />
@@ -49,7 +53,7 @@ export default function page() {
 	useEffect(() => {
 		async function getPosts() {
 			try {
-				const posts: Tables<"class_posts">[] = await apiFetch("/api/newsfeed/school/get-newsfeed?sort=desc", {
+				const posts: Tables<"class_posts">[] = await apiFetch("/api/newsfeed/school/post/get-newsfeed?sort=desc", {
 					method: "GET",
 				});
 
@@ -93,10 +97,11 @@ export default function page() {
 			<div className="flex flex-col justify-between w-full space-y-2">
 				<h5 className="font-semibold">Pending Newsfeed Approvals</h5>
 				<div className="flex flex-col items-center gap-3 h-64 bg-off-white border border-gray-200 p-2 rounded-lg overflow-y-auto">
-					{pendingPosts && pendingPosts?.map((post) => <PostListItem key={post.id} post={post} showPost={setShowPost} tableName="class_posts"/>)}
+					{pendingPosts &&
+						pendingPosts?.map((post) => <PostListItem key={post.id} post={post} showPost={setShowPost} tableName="class_posts" />)}
 				</div>
 			</div>
-			
+
 			<div className="flex flex-col justify-between w-full space-y-2">
 				<div className="flex flex-row items-center justify-between">
 					<h5 className="font-semibold">Published School Newsfeed</h5>
@@ -110,24 +115,23 @@ export default function page() {
 					/>
 				</div>
 				<div className="flex flex-col items-center gap-3 h-64 bg-off-white border border-gray-200 p-2 rounded-lg overflow-y-auto">
-					{schoolNewsfeed && schoolNewsfeed?.map((post) => <PostListItem key={post.id} post={post} showPost={setShowPost} tableName="school_posts"/>)}
+					{schoolNewsfeed &&
+						schoolNewsfeed?.map((post) => <PostListItem key={post.id} post={post} showPost={setShowPost} tableName="school_posts" />)}
 				</div>
 			</div>
-
 
 			<div className="col-span-2 space-y-2">
 				<h5 className="font-semibold">Recently Approved Newsfeed</h5>
 				<div className="flex flex-col items-center gap-3 h-64 bg-off-white border border-gray-200 p-2 rounded-lg overflow-y-auto">
-					{approvedPosts && approvedPosts?.map((post) => <PostListItem key={post.id} post={post} showPost={setShowPost} tableName="class_posts"/>)}
+					{approvedPosts &&
+						approvedPosts?.map((post) => <PostListItem key={post.id} post={post} showPost={setShowPost} tableName="class_posts" />)}
 				</div>
 			</div>
 			{showCreatePost && <CreatePost close={() => setShowCreatePost(false)} postType="school_posts" />}
 			{showPost !== null && showPost.table_name === "school_posts" && (
-				<DeletePost post={showPost} close={() => setShowPost(null)} />
+				<DeletePost type="school" post={showPost} close={() => setShowPost(null)} />
 			)}
-			{showPost !== null && showPost.table_name === "class_posts" && (
-				<OpenPost post={showPost} close={() => setShowPost(null)} />
-			)}
+			{showPost !== null && showPost.table_name === "class_posts" && <OpenPost post={showPost} close={() => setShowPost(null)} />}
 		</main>
 	);
 }

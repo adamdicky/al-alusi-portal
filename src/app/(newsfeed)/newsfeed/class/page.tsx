@@ -7,7 +7,27 @@ import React, { useEffect, useState } from "react";
 import { apiFetch } from "@/utils/functions/fetch";
 // import { User  } from "@phosphor-icons/react";
 
-const class_options = ["All Classes", "1UKM", "1USM", "1UPM", "2UKM", "2USM", "2UPM", "3UKM", "3USM", "3UPM", "4UKM", "4USM", "4UPM", "5UKM", "5USM", "5UPM", "6UKM", "6USM", "6UPM"];
+const class_options = [
+	"All Classes",
+	"1UKM",
+	"1USM",
+	"1UPM",
+	"2UKM",
+	"2USM",
+	"2UPM",
+	"3UKM",
+	"3USM",
+	"3UPM",
+	"4UKM",
+	"4USM",
+	"4UPM",
+	"5UKM",
+	"5USM",
+	"5UPM",
+	"6UKM",
+	"6USM",
+	"6UPM",
+];
 
 export default function Home() {
 	const [posts, setPosts] = useState<Tables<"class_posts">[]>();
@@ -16,7 +36,7 @@ export default function Home() {
 	useEffect(() => {
 		async function getPosts() {
 			try {
-				const queryParam = selectedClass === "All Classes" ? "" : `?class=${encodeURIComponent(selectedClass)}`
+				const queryParam = selectedClass === "All Classes" ? "" : `?class=${encodeURIComponent(selectedClass)}`;
 				const posts: Tables<"class_posts">[] = await apiFetch(`/api/newsfeed/class/post/get${queryParam}`, {
 					method: "GET",
 				});
@@ -34,7 +54,7 @@ export default function Home() {
 
 	const handleClassChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		setSelectedClass(e.target.value);
-	}
+	};
 
 	return (
 		<>
@@ -44,7 +64,7 @@ export default function Home() {
 						<div className="flex flex-row items-center gap-8">
 							<h5 className="font-bold text-nowrap">1USM Newsfeed</h5>
 							<div className="flex flex-row items-center justify-between w-full">
-								<select 
+								<select
 									className="text-gray-700 rounded-full py-1 px-3 border-gray-200 border font-semibold"
 									value={selectedClass}
 									onChange={(e) => setSelectedClass(e.target.value)}
@@ -79,9 +99,7 @@ export default function Home() {
 						</div>
 
 						<div className="flex flex-col items-center py-4 gap-7">
-							{posts && posts.length > 0 ? (
-								posts.map((post) => <Post key={post.id} post={post} />)
-							) : (<p>No posts available.</p>)}
+							{posts && posts.length > 0 ? posts.map((post) => <Post key={post.id} post={post} />) : <p>No posts available.</p>}
 							{/* {posts ? posts.map((post) => <Post key={post.id} post={post} />) : "No posts available."} */}
 						</div>
 					</div>

@@ -25,7 +25,6 @@ export default function CreatePost({ close, postType }: CreatePostProps) {
 
 	const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (e.target.files) {
-			
 			const selectedFiles = Array.from(e.target.files);
 
 			if (selectedFiles.length + images.length > 3) {
@@ -48,12 +47,12 @@ export default function CreatePost({ close, postType }: CreatePostProps) {
 
 			images.forEach((image) => {
 				formData.append("files", image);
-			})
+			});
 
 			const uploadResponse = await fetch("/api/uploadimage", {
 				method: "POST",
 				body: formData,
-			})
+			});
 
 			if (!uploadResponse.ok) {
 				throw new Error("Image upload failed.");
@@ -70,26 +69,21 @@ export default function CreatePost({ close, postType }: CreatePostProps) {
 				bucket_id,
 			});
 
-
-			await apiFetch(
-				postType === "school_posts"
-					? "/api/newsfeed/school/create-post" : "/api/newsfeed/class/post/create",
-				{
-					method: "POST",
-					body: JSON.stringify({
-						title,
-						description,
-						images_path,
-						images_id,
-						bucket_id,
-					}),
-				}
-			);
+			await apiFetch(postType === "school_posts" ? "/api/newsfeed/school/create-post" : "/api/newsfeed/class/post/create", {
+				method: "POST",
+				body: JSON.stringify({
+					title,
+					description,
+					images_path,
+					images_id,
+					bucket_id,
+				}),
+			});
 
 			close();
 		} catch (error) {
 			console.error("Failed to create post:", error);
-			alert("Failed to create post. Check console for details.")
+			alert("Failed to create post. Check console for details.");
 		}
 	}
 
@@ -134,10 +128,21 @@ export default function CreatePost({ close, postType }: CreatePostProps) {
 
 					<div className="mb-6">
 						<label className="block text-sm font-medium text-gray-700 mb-2">Attach Images</label>
-						<div onClick={handleUploadClick} className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-200 rounded-md cursor-pointer hover:border-gray-400 focus:border-gray-400">
+						<div
+							onClick={handleUploadClick}
+							className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-200 rounded-md cursor-pointer hover:border-gray-400 focus:border-gray-400"
+						>
 							<UploadSimple size={60} weight="bold" className="text-gray-500" />
 							<p className="text-gray-500 mt-2 text-sm">Click to upload images.</p>
-							<Input ref={fileInputRef} id="image-upload" type="file" accept="image/*" multiple className="hidden" onChange={handleImageChange} />
+							<Input
+								ref={fileInputRef}
+								id="image-upload"
+								type="file"
+								accept="image/*"
+								multiple
+								className="hidden"
+								onChange={handleImageChange}
+							/>
 						</div>
 
 						{/* Image Preview */}

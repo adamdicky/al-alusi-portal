@@ -12,7 +12,7 @@ export default function Home() {
 	useEffect(() => {
 		async function getPosts() {
 			try {
-				const posts: Tables<"school_posts">[] = await apiFetch("/api/newsfeed/school/get-newsfeed?sort=desc", {
+				const posts: Tables<"school_posts">[] = await apiFetch("/api/newsfeed/school/post/get-newsfeed?sort=desc", {
 					method: "GET",
 				});
 

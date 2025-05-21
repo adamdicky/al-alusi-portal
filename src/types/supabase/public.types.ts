@@ -1,3 +1,6 @@
+Need to install the following packages:
+supabase@2.23.4
+Ok to proceed? (y) 
 export type Json =
   | string
   | number
@@ -173,6 +176,35 @@ export type Database = {
           race?: string
         }
         Relationships: []
+      }
+      post_review: {
+        Row: {
+          created_at: string
+          id: string
+          post_id: string | null
+          remarks: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          post_id?: string | null
+          remarks: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          post_id?: string | null
+          remarks?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "post_review_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "class_posts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       school_posts: {
         Row: {
