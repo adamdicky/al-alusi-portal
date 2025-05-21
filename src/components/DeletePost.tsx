@@ -31,7 +31,7 @@ const DeletePost = ({ post, type, close }: { post: Tables<"school_posts" | "clas
 					<div className="flex flex-row items-center gap-2 w-full">
 						<User size={32} />
 						<div>
-							<h6 className="font-semibold w-44 overflow-hidden text-ellipsis whitespace-nowrap">{post.title}</h6>
+							<h6 className="font-semibold w-44 overflow-hidden text-ellipsis whitespace-nowrap">{post.author_id}</h6>
 							<div className="flex flex-row items-center gap-2">
 								<h6 className="text-[12px] text-[#909090]">
 									{new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "short" }).format(new Date(post.created_at))}
@@ -46,6 +46,7 @@ const DeletePost = ({ post, type, close }: { post: Tables<"school_posts" | "clas
 					</div>
 
 					<div className="text-justify">
+						<h6><b>{post.title}</b></h6>
 						<p>{post.content}</p>
 					</div>
 

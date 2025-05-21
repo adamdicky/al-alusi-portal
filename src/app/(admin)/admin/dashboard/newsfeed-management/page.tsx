@@ -7,6 +7,7 @@ import CreatePost from "@/components/CreatePost";
 import { Tables } from "@/types/supabase/public.types";
 import { apiFetch } from "@/utils/functions/fetch";
 import DeletePost from "@/components/DeletePost";
+import CreateUser from "@/components/CreateUser";
 import OpenPost from "@/components/OpenPost";
 
 function PostListItem({
@@ -36,6 +37,7 @@ function PostListItem({
 				>
 					view
 				</button>
+				<CreateUser close={() => {}} />
 			</div>
 		</div>
 	);
@@ -125,7 +127,7 @@ export default function page() {
 						approvedPosts?.map((post) => <PostListItem key={post.id} post={post} showPost={setShowPost} tableName="class_posts" />)}
 				</div>
 			</div>
-			{showCreatePost && <CreatePost type="school_post" close={() => setShowCreatePost(false)} />}
+			{showCreatePost && <CreatePost close={() => setShowCreatePost(false)} postType="school_posts" />}
 			{showPost !== null && showPost.table_name === "school_posts" && (
 				<DeletePost type="school" post={showPost} close={() => setShowPost(null)} />
 			)}

@@ -11,13 +11,24 @@ export async function GET(req: NextRequest) {
 		const supabase = await createClient();
 
 		const { searchParams } = new URL(req.nextUrl);
+		const className = searchParams.get("class");
 		const sort = searchParams.get("sort") || "desc"; // default: latest first
 
-		const { data, error } = await supabase
+		let query = supabase
 			.from("class_posts")
 			.select()
-			.eq("author_id", user.id)
 			.order("created_at", { ascending: sort === "asc" });
+
+		if (className) {
+			query = query.eq("class", className);
+		}
+
+		// const { data, error } = await supabase
+		//   .from("class_posts")
+		//   .select()
+		//   .order("created_at", { ascending: sort === "asc" });
+
+		const { data, error } = await query;
 
 		if (error) throw error;
 		return NextResponse.json(data);

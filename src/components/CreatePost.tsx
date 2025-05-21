@@ -1,35 +1,91 @@
 "use client";
 
-import { useState } from "react";
-
+import { useState, useRef } from "react";
 import { UploadSimple, X } from "@phosphor-icons/react";
 import Input from "@/components/ui/input";
 import Textarea from "@/components/ui/textarea";
 import Button from "@/components/Button";
-
+import Image from "next/image";
 import { apiFetch } from "@/utils/functions/fetch";
 
-export default function CreatePost({ type, close }: { type: "class_post" | "school_post"; close: () => void }) {
+interface CreatePostProps {
+	close: () => void;
+	postType: "school_posts" | "class_posts";
+}
+
+export default function CreatePost({ close, postType }: CreatePostProps) {
 	const [title, setTitle] = useState<string>("");
 	const [description, setDescription] = useState<string>("");
-	const [images, setImages] = useState<FileList | null>(null);
+	const [images, setImages] = useState<File[]>([]);
+	const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+	const handleUploadClick = () => {
+		fileInputRef.current?.click();
+	};
+
+	const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		if (e.target.files) {
+			const selectedFiles = Array.from(e.target.files);
+
+			if (selectedFiles.length + images.length > 3) {
+				alert("You can only upload a maximum of 3 images.");
+				return;
+			}
+
+			setImages((prevImages) => [...prevImages, ...selectedFiles]);
+		}
+	};
+
+	const removeImage = (index: number) => {
+		setImages((prevImages) => prevImages.filter((_, i) => i !== index));
+	};
 
 	async function createPost() {
 		try {
-			await apiFetch(`/api/newsfeed/${type === "school_post" ? "school" : "class"}/create-post`, {
+			const formData = new FormData();
+			formData.append("postType", postType);
+
+			images.forEach((image) => {
+				formData.append("files", image);
+			});
+
+			const uploadResponse = await fetch("/api/uploadimage", {
 				method: "POST",
-				body: JSON.stringify({ title, description, images: images ? images : "none" }),
+				body: formData,
+			});
+
+			if (!uploadResponse.ok) {
+				throw new Error("Image upload failed.");
+			}
+
+			const uploadedData = await uploadResponse.json();
+			const { images_path, images_id, bucket_id } = uploadedData;
+
+			console.log({
+				title,
+				description,
+				images_path,
+				images_id,
+				bucket_id,
+			});
+
+			await apiFetch(postType === "school_posts" ? "/api/newsfeed/school/create-post" : "/api/newsfeed/class/post/create", {
+				method: "POST",
+				body: JSON.stringify({
+					title,
+					description,
+					images_path,
+					images_id,
+					bucket_id,
+				}),
 			});
 
 			close();
 		} catch (error) {
-			console.error(error);
+			console.error("Failed to create post:", error);
+			alert("Failed to create post. Check console for details.");
 		}
 	}
-
-	const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setImages(e.target.files);
-	};
 
 	return (
 		<div className="fixed inset-0 bg-black/75 flex items-center justify-center z-50">
@@ -72,10 +128,42 @@ export default function CreatePost({ type, close }: { type: "class_post" | "scho
 
 					<div className="mb-6">
 						<label className="block text-sm font-medium text-gray-700 mb-2">Attach Images</label>
-						<div className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-200 rounded-md cursor-pointer hover:border-gray-400 focus:border-gray-400">
+						<div
+							onClick={handleUploadClick}
+							className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-200 rounded-md cursor-pointer hover:border-gray-400 focus:border-gray-400"
+						>
 							<UploadSimple size={60} weight="bold" className="text-gray-500" />
-							<p className="text-gray-500 mt-2 text-sm">Click to upload images</p>
-							<Input id="image-upload" type="file" accept="image/*" multiple className="hidden" onChange={handleImageChange} />
+							<p className="text-gray-500 mt-2 text-sm">Click to upload images.</p>
+							<Input
+								ref={fileInputRef}
+								id="image-upload"
+								type="file"
+								accept="image/*"
+								multiple
+								className="hidden"
+								onChange={handleImageChange}
+							/>
+						</div>
+
+						{/* Image Preview */}
+						<div className="mt-4 flex gap-4 flex-wrap">
+							{images.map((image, index) => (
+								<div key={index} className="relative">
+									<Image
+										src={URL.createObjectURL(image)}
+										alt={`Preview ${index}`}
+										width={100}
+										height={100}
+										className="rounded-md object-cover"
+									/>
+									<X
+										size={16}
+										weight="bold"
+										className="absolute top-1 right-1 cursor-pointer text-red-500 bg-white rounded-full"
+										onClick={() => removeImage(index)}
+									/>
+								</div>
+							))}
 						</div>
 					</div>
 

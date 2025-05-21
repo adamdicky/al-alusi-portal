@@ -10,7 +10,7 @@ export default function Post({ post }: { post: Tables<"school_posts"> }) {
 			<div className="flex flex-row items-center gap-2">
 				<User size={32} />
 				<div>
-					<h6 className="font-bold">{post.title}</h6>
+					<h6 className="font-bold">{post.author_id}</h6>
 					<div>
 						<h6 className="text-[12px] text-[#909090]">
 							{new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "short" }).format(new Date(post.created_at))}
@@ -25,6 +25,7 @@ export default function Post({ post }: { post: Tables<"school_posts"> }) {
 			</div>
 
 			<div className="text-justify">
+				<h6><b>{post.title}</b></h6>
 				<p>{post.content}</p>
 			</div>
 
