@@ -14,7 +14,7 @@ const codes = ["UKM", "UPM", "USM"] as const;
 
 export default function CreateUser({ close }: { close: () => void }) {
 	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
+	const [fullname, setFullname] = useState("");
 	const [role, setRole] = useState<"teacher" | "admin" | "staff jabatan">("teacher");
 	const [classroom, setClassroom] = useState<Classroom>();
 
@@ -24,7 +24,7 @@ export default function CreateUser({ close }: { close: () => void }) {
 				method: "POST",
 				body: JSON.stringify({
 					email,
-					password,
+					fullname,
 					role: role === "teacher" ? { name: "teacher", class: classroom } : role,
 				}),
 			});
@@ -51,8 +51,8 @@ export default function CreateUser({ close }: { close: () => void }) {
 					</div>
 
 					<div>
-						<label className="block font-semibold mb-1">Password</label>
-						<Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter password" />
+						<label className="block font-semibold mb-1">Full Name</label>
+						<Input type="text" value={fullname} onChange={(e) => setFullname(e.target.value)} placeholder="Enter full name" />
 					</div>
 
 					<div>

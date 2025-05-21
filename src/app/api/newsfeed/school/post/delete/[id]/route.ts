@@ -2,7 +2,7 @@ import { authorized } from "@/utils/functions/auth";
 import { createClient } from "@/utils/supabase-connection/server";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
 	try {
 		const user = await authorized("admin");
 

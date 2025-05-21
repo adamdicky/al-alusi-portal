@@ -69,7 +69,7 @@ export default function CreatePost({ close, postType }: CreatePostProps) {
 				bucket_id,
 			});
 
-			await apiFetch(postType === "school_posts" ? "/api/newsfeed/school/create-post" : "/api/newsfeed/class/post/create", {
+			await apiFetch(postType === "school_posts" ? "/api/newsfeed/school/post/create" : "/api/newsfeed/class/post/create", {
 				method: "POST",
 				body: JSON.stringify({
 					title,
@@ -89,7 +89,7 @@ export default function CreatePost({ close, postType }: CreatePostProps) {
 
 	return (
 		<div className="fixed inset-0 bg-black/75 flex items-center justify-center z-50">
-			<div className="bg-white w-full max-w-2xl rounded-xl p-6 relative space-y-2">
+			<div className="bg-white w-full max-w-2xl max-h-11/12 rounded-xl p-6 relative space-y-2 overflow-y-scroll">
 				<button type="button" onClick={close} className="block ml-auto cursor-pointer">
 					<X size="18" weight="bold" className="text-black" />
 				</button>

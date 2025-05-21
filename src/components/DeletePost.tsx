@@ -11,7 +11,7 @@ const DeletePost = ({ post, type, close }: { post: Tables<"school_posts" | "clas
 	async function deletePost(e: React.MouseEvent<HTMLButtonElement>) {
 		e.preventDefault();
 		try {
-			const deletePost = await apiFetch(`/api/newsfeed/${type}/delete/${post.id}`, {
+			const deletePost = await apiFetch(`/api/newsfeed/${type}/post/delete/${post.id}`, {
 				method: "DELETE",
 			});
 
@@ -46,7 +46,9 @@ const DeletePost = ({ post, type, close }: { post: Tables<"school_posts" | "clas
 					</div>
 
 					<div className="text-justify">
-						<h6><b>{post.title}</b></h6>
+						<h6>
+							<b>{post.title}</b>
+						</h6>
 						<p>{post.content}</p>
 					</div>
 

@@ -7,7 +7,6 @@ import CreatePost from "@/components/CreatePost";
 import { Tables } from "@/types/supabase/public.types";
 import { apiFetch } from "@/utils/functions/fetch";
 import DeletePost from "@/components/DeletePost";
-import CreateUser from "@/components/CreateUser";
 import OpenPost from "@/components/OpenPost";
 
 function PostListItem({
@@ -37,7 +36,6 @@ function PostListItem({
 				>
 					view
 				</button>
-				<CreateUser close={() => {}} />
 			</div>
 		</div>
 	);
@@ -90,13 +88,13 @@ export default function page() {
 		getApprovedPosts();
 		getPendingPosts();
 		getPosts();
-	}, []);
+	}, [showPost, showCreatePost]);
 
 	return (
 		<main className="col-span-4 grid grid-cols-2 grid-rows-2 grid-flow-row gap-4 p-4 bg-white border border-gray-200 rounded-lg">
 			<div className="flex flex-col justify-between w-full space-y-2">
 				<h5 className="font-semibold">Pending Newsfeed Approvals</h5>
-				<div className="flex flex-col items-center gap-3 h-64 bg-off-white border border-gray-200 p-2 rounded-lg overflow-y-auto">
+				<div className="flex flex-col items-center gap-3 h-64 bg-off-white border border-gray-200 p-2 rounded-lg overflow-y-scroll">
 					{pendingPosts &&
 						pendingPosts?.map((post) => <PostListItem key={post.id} post={post} showPost={setShowPost} tableName="class_posts" />)}
 				</div>
@@ -114,7 +112,7 @@ export default function page() {
 						iconWeight="bold"
 					/>
 				</div>
-				<div className="flex flex-col items-center gap-3 h-64 bg-off-white border border-gray-200 p-2 rounded-lg overflow-y-auto">
+				<div className="flex flex-col items-center gap-3 h-64 bg-off-white border border-gray-200 p-2 rounded-lg overflow-y-scroll">
 					{schoolNewsfeed &&
 						schoolNewsfeed?.map((post) => <PostListItem key={post.id} post={post} showPost={setShowPost} tableName="school_posts" />)}
 				</div>
@@ -122,7 +120,7 @@ export default function page() {
 
 			<div className="col-span-2 space-y-2">
 				<h5 className="font-semibold">Recently Approved Newsfeed</h5>
-				<div className="flex flex-col items-center gap-3 h-64 bg-off-white border border-gray-200 p-2 rounded-lg overflow-y-auto">
+				<div className="flex flex-col items-center gap-3 h-64 bg-off-white border border-gray-200 p-2 rounded-lg overflow-y-scroll">
 					{approvedPosts &&
 						approvedPosts?.map((post) => <PostListItem key={post.id} post={post} showPost={setShowPost} tableName="class_posts" />)}
 				</div>

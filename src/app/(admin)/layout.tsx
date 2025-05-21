@@ -23,7 +23,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<html>
-			<body className={`${poppins.variable} ${instrumentSans.variable} antialiased`}>
+			<body className={`${poppins.variable} ${instrumentSans.variable} antialiased space-y-4`}>
 				<section className="grid grid-cols-5 grid-flow-row gap-4 p-3 h-[90vh]">
 					<aside className="flex flex-col items-center h-full gap-4 bg-white p-4 border border-gray-200 rounded-lg">
 						<div className="flex flex-row items-center gap-1">
@@ -44,7 +44,7 @@ export default function RootLayout({
 							</li>
 							<li className="flex flex-row items-center gap-3 rounded-xs py-1 px-1.5  hover:bg-off-white">
 								<Users size={24} className="text-black" />
-								<Link href={"/admin/dashboard/newsfeed-management"} className="w-full text-left">
+								<Link href={"/admin/dashboard/user-management"} className="w-full text-left">
 									User Management
 								</Link>
 							</li>

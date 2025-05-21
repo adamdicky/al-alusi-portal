@@ -26,12 +26,14 @@ export async function updateSession(request: NextRequest) {
 	// issues with users being randomly logged out.
 
 	// IMPORTANT: DO NOT REMOVE auth.getUser()
+	const pathname = request.nextUrl.pathname;
+
+	if (pathname === "/") return NextResponse.redirect(new URL("/newsfeed/school", request.nextUrl));
 
 	const {
 		data: { user },
 	} = await supabase.auth.getUser();
 
-	const pathname = request.nextUrl.pathname;
 	//? User not authenticated
 	if (
 		!user &&
