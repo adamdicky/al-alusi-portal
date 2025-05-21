@@ -27,8 +27,8 @@ export default function CreatePost({ close, postType }: CreatePostProps) {
 		if (e.target.files) {
 			const selectedFiles = Array.from(e.target.files);
 
-			if (selectedFiles.length + images.length > 3) {
-				alert("You can only upload a maximum of 3 images.");
+			if (selectedFiles.length + images.length > 4) {
+				alert("You can only upload a maximum of 4 images.");
 				return;
 			}
 

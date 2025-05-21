@@ -70,7 +70,7 @@ export default function Post({ post }: { post: Tables<"school_posts"> }) {
 
 							{index === 2 && imagePaths.length > 3 && (
 								<div
-									className="absolute inset-0 flex items-center justify-center text-white font-bold text-lg bg-black/40 cursor-pointer"
+									className="absolute inset-0 flex items-center justify-center text-white hover:text-2xl font-bold text-lg bg-black/60 cursor-pointer"
 									onClick={() => handleImageClick(index)}
 								>
 									<p>Show more +</p>
