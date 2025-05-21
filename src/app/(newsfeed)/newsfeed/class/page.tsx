@@ -3,19 +3,25 @@
 import Button from "@/components/Button";
 import Post from "@/components/Post";
 import { Tables } from "@/types/supabase/public.types";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { apiFetch } from "@/utils/functions/fetch";
 // import { User  } from "@phosphor-icons/react";
 
+const class_options = ["All Classes", "1UKM", "1USM", "1UPM", "2UKM", "2USM", "2UPM", "3UKM", "3USM", "3UPM", "4UKM", "4USM", "4UPM", "5UKM", "5USM", "5UPM", "6UKM", "6USM", "6UPM"];
+
 export default function Home() {
 	const [posts, setPosts] = useState<Tables<"class_posts">[]>();
+	const [selectedClass, setSelectedClass] = useState<string>("All Classes");
 
 	useEffect(() => {
 		async function getPosts() {
 			try {
-				const posts: Tables<"class_posts">[] = await apiFetch("/api/newsfeed/school/get-newsfeed?sort=desc", {
+				const queryParam = selectedClass === "All Classes" ? "" : `?class=${encodeURIComponent(selectedClass)}`
+				const posts: Tables<"class_posts">[] = await apiFetch(`/api/newsfeed/class/post/get${queryParam}`, {
 					method: "GET",
 				});
+
+				console.log("Posts fethced: ", posts);
 
 				setPosts(posts);
 			} catch (error) {
@@ -24,7 +30,12 @@ export default function Home() {
 		}
 
 		getPosts();
-	}, []);
+	}, [selectedClass]);
+
+	const handleClassChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		setSelectedClass(e.target.value);
+	}
+
 	return (
 		<>
 			<div className="flex flex-col min-h-screen">
@@ -33,7 +44,19 @@ export default function Home() {
 						<div className="flex flex-row items-center gap-8">
 							<h5 className="font-bold text-nowrap">1USM Newsfeed</h5>
 							<div className="flex flex-row items-center justify-between w-full">
-								<Button
+								<select 
+									className="text-gray-700 rounded-full py-1 px-3 border-gray-200 border font-semibold"
+									value={selectedClass}
+									onChange={(e) => setSelectedClass(e.target.value)}
+								>
+									{class_options.map((className) => (
+										<option key={className} value={className}>
+											{className}
+										</option>
+									))}
+								</select>
+
+								{/* <Button
 									type="button"
 									color="border-white"
 									text="Class:"
@@ -41,7 +64,8 @@ export default function Home() {
 									iconWeight="bold"
 									iconSide="right"
 									className="text-gray-700 rounded-full py-1 px-3 border-gray-200 border"
-								/>
+								/> */}
+
 								<Button
 									type="button"
 									color="border-white"
@@ -55,7 +79,10 @@ export default function Home() {
 						</div>
 
 						<div className="flex flex-col items-center py-4 gap-7">
-							{posts ? posts.map((post) => <Post key={post.id} post={post} />) : ""}
+							{posts && posts.length > 0 ? (
+								posts.map((post) => <Post key={post.id} post={post} />)
+							) : (<p>No posts available.</p>)}
+							{/* {posts ? posts.map((post) => <Post key={post.id} post={post} />) : "No posts available."} */}
 						</div>
 					</div>
 				</main>
