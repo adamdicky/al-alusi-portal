@@ -82,7 +82,7 @@ const DeletePost = ({ post, type, close }: { post: Tables<"school_posts" | "clas
 							<div className="grid grid-cols-3 gap-2 w-full rounded-xl overflow-hidden h-60 relative">
 								{previewImages.map((path, index) => (
 									<div key={path}
-										className={`relative w-full h-full ${index === 2 && imagePaths.length > 3 ? "brightness-50" : ""} cursor-pointer`}
+										className={`relative w-full h-full ${index === 2 && imagePaths.length > 3 ? "brightness-85" : ""} cursor-pointer`}
 										onClick={() => handleImageClick(index)}
 									>
 										<Image

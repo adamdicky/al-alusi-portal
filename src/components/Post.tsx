@@ -56,7 +56,7 @@ export default function Post({ post }: { post: Tables<"school_posts"> }) {
 				<div className="grid grid-cols-3 gap-2 w-full rounded-xl overflow-hidden h-60 relative">
 					{previewImages.map((path, index) => (
 						<div key={path}
-							className={`relative w-full h-full ${index === 2 && imagePaths.length > 3 ? "brightness-50" : ""} cursor-pointer`}
+							className={`relative w-full h-full ${index === 2 && imagePaths.length > 3 ? "brightness-85" : ""} cursor-pointer`}
 							onClick={() => handleImageClick(index)}
 						>
 							<Image
@@ -78,16 +78,6 @@ export default function Post({ post }: { post: Tables<"school_posts"> }) {
 							)}
 						</div>
 					))}
-					{/* <div className="relative w-full h-60 overflow-hidden rounded-xl">
-						<Image
-							src="/example pic siraj al alusi.jpg"
-							alt="example pic"
-							fill
-							// width={1170}
-							// height={1000}
-							className="object-cover rounded-xl"
-						/>
-					</div> */}
 				</div>
 				
 			)}

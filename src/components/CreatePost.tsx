@@ -1,12 +1,16 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { UploadSimple, X } from "@phosphor-icons/react";
 import Input from "@/components/ui/input";
 import Textarea from "@/components/ui/textarea";
 import Button from "@/components/Button";
 import Image from "next/image";
 import { apiFetch } from "@/utils/functions/fetch";
+import { createClient } from "@/utils/supabase-connection/client";
+import { create } from "domain";
+
+const supabase = createClient();
 
 interface CreatePostProps {
 	close: () => void;
@@ -17,7 +21,24 @@ export default function CreatePost({ close, postType }: CreatePostProps) {
 	const [title, setTitle] = useState<string>("");
 	const [description, setDescription] = useState<string>("");
 	const [images, setImages] = useState<File[]>([]);
+	const [userId, setUserId] = useState<string | null>(null);
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+	useEffect(() => {
+		const fetchUser = async () => {
+			const { data: { user } } = await supabase.auth.getUser();
+			setUserId(user?.id ?? "Unknown");
+		};
+
+		fetchUser();
+	}, []);
+
+	const now = new Date();
+	const date = new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "short" }).format(now);
+	const time = new Intl.DateTimeFormat("en-GB", { hour: "numeric", minute: "2-digit", hour12: true })
+		.format(now)
+		.toLowerCase();
+
 
 	const handleUploadClick = () => {
 		fileInputRef.current?.click();
@@ -98,8 +119,8 @@ export default function CreatePost({ close, postType }: CreatePostProps) {
 						<div className="flex items-center space-x-3">
 							<div className="w-10 h-10 rounded-full bg-gray-300" />
 							<div>
-								<p className="font-semibold text-black">Mr. Fairouz</p>
-								<p className="text-sm text-gray-500">15 Mar &nbsp; 03:30pm</p>
+								<p className="font-semibold text-black">{userId ?? "Unkown User"}</p>
+								<p className="text-sm text-gray-500">{date} &nbsp; {time}</p>
 							</div>
 						</div>
 					</div>
