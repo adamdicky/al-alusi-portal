@@ -11,6 +11,9 @@ const OpenPost = ({ post, close }: { post: Tables<"school_posts" | "class_posts"
     
     // State for the remark input
     const [remarkText, setRemarkText] = useState<string>("");
+    
+    //Check if this is class_post and if its approved
+    const isPostApproved = (post as Tables<"class_posts">).status === "approved";
 
     // Function to handle Make Remark button click
     async function makeRemark(e: React.MouseEvent<HTMLButtonElement>) {
@@ -61,14 +64,14 @@ const OpenPost = ({ post, close }: { post: Tables<"school_posts" | "class_posts"
                     <X size="18" weight="bold" className="text-black" />
                 </button>
 				
-                <div className="flex flex-row border border-gray-200 rounded-md p-4 space-y-6">
+                <div className="flex flex-row justify-around border border-gray-200 rounded-md p-4 space-y-6">
                   
-				   <div className="flex flex-col gap-4 p-3 mb-0">
+				   <div className="flex flex-col w-full gap-4 p-3 mb-0">
 						{/* Content */}
 						<div className="flex flex-row items-center gap-2 w-full">
 							<User size={32} />
 							<div>
-								<h6 className="font-semibold w-44 overflow-hidden text-ellipsis whitespace-nowrap">{post.title}</h6>
+								<h6 className="font-semibold w-44 overflow-hidden text-ellipsis whitespace-nowrap">{post.author_id}</h6>
 								<div className="flex flex-row items-center gap-2">
 									<h6 className="text-[12px] text-[#909090]">
 										{new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "short" }).format(new Date(post.created_at))}
@@ -83,6 +86,7 @@ const OpenPost = ({ post, close }: { post: Tables<"school_posts" | "class_posts"
 						</div>
 
 						<div className="text-justify">
+                            <h6><b>{post.title}</b></h6>
 							<p>{post.content}</p>
 						</div>
 
@@ -96,7 +100,8 @@ const OpenPost = ({ post, close }: { post: Tables<"school_posts" | "class_posts"
 						</div>
 				   </div>
 
-					<div>
+                    {!isPostApproved && (
+                    <div>
 						 {/* Remark Text Field */}
 						<textarea 
 							className="w-[190px] h-full border border-gray-300 rounded-md p-2 " 
@@ -105,15 +110,20 @@ const OpenPost = ({ post, close }: { post: Tables<"school_posts" | "class_posts"
 							onChange={(e) => setRemarkText(e.target.value)}
 						/>
 					</div>
+                    )}
+				
                    
                 </div>
 
-                {/* Action Buttons */}
+                {!isPostApproved && (
                 <div className="flex justify-end gap-2">
                     <Button text="Make Remark"  onClick={makeRemark} className="font-semibold text-sm bg-yellow-500 text-white" />
                     <Button text="Approve" color="dark-blue" onClick={(e) => updateStatus(e, "approved")} className="font-semibold text-sm" />
                     <Button text="Reject" color="danger" onClick={(e) => updateStatus(e, "rejected")} className="font-semibold text-sm" />
                 </div>
+                )}
+                {/* Action Buttons */}
+                
             </div>
         </div>
     );
