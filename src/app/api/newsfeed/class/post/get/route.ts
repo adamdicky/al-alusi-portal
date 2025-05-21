@@ -4,9 +4,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
 	try {
-		const user = await authorized("teacher");
+		// const user = await authorized("teacher");
 
-		if (!user) return NextResponse.json({ msg: "Unauthorized" }, { status: 403 });
+		// if (!user) return NextResponse.json({ msg: "Unauthorized" }, { status: 403 });
 
 		const supabase = await createClient();
 
