@@ -18,6 +18,10 @@ function PostListItem({
 	showPost: (x: null | (Tables<"school_posts" | "class_posts"> & { table_name: "school_posts" | "class_posts" })) => void;
 	tableName: "school_posts" | "class_posts";
 }) {
+	const iamgeUrl = post.images_path && post.images_path.length > 0 && post.bucket_id 
+	? `https://apkeqsxxyrlsariwtaow.supabase.co/storage/v1/object/public/${post.bucket_id}/${post.images_path[0]}`
+	: "/example pic siraj al alusi.jpg";
+	
 	return (
 		<div className="flex flex-row items-center justify-between bg-white border border-gray-200 px-3 py-1.5 rounded-md w-full">
 			<h6 className="font-medium w-44 overflow-hidden text-ellipsis whitespace-nowrap">{post.title}</h6>
