@@ -95,16 +95,16 @@ export default function page() {
 	}, [showPost, showCreatePost]);
 
 	return (
-		<main className="col-span-4 grid grid-cols-2 grid-rows-2 grid-flow-row gap-4 p-4 bg-white border border-gray-200 rounded-lg">
-			<div className="flex flex-col justify-between w-full space-y-2">
+		<main className="bg-white col-span-4 grid grid-cols-2 grid-rows-2 grid-flow-row gap-4 p-4 border border-gray-200 rounded-lg">
+			<div className="pt-1 flex flex-col gap-2 w-full space-y-2">
 				<h5 className="font-semibold">Pending Newsfeed Approvals</h5>
 				<div className="flex flex-col items-center gap-3 h-64 bg-off-white border border-gray-200 p-2 rounded-lg overflow-y-scroll">
 					{pendingPosts &&
 						pendingPosts?.map((post) => <PostListItem key={post.id} post={post} showPost={setShowPost} tableName="class_posts" />)}
 				</div>
 			</div>
-
-			<div className="flex flex-col justify-between w-full space-y-2">
+			{/* COMMENT */}
+			<div className="flex flex-col w-full space-y-2">
 				<div className="flex flex-row items-center justify-between">
 					<h5 className="font-semibold">Published School Newsfeed</h5>
 					<Button
@@ -121,7 +121,7 @@ export default function page() {
 						schoolNewsfeed?.map((post) => <PostListItem key={post.id} post={post} showPost={setShowPost} tableName="school_posts" />)}
 				</div>
 			</div>
-
+			{/* COMMENT */}
 			<div className="col-span-2 space-y-2">
 				<h5 className="font-semibold">Recently Approved Newsfeed</h5>
 				<div className="flex flex-col items-center gap-3 h-64 bg-off-white border border-gray-200 p-2 rounded-lg overflow-y-scroll">
