@@ -8,18 +8,24 @@ export async function POST(req: NextRequest) {
 
 		if (!user) return NextResponse.json({ msg: "Unauthorized" }, { status: 401 });
 
-		const { author_id, title, content } = await req.json();
+		const body = await req.json();
+		console.log("Received body:", body);
 
-		if (!author_id || !title || !content) return NextResponse.json({ msg: "Some fields are missing" }, { status: 400 });
+		const { title, description, images_id, images_path, bucket_id } = body;
 
+		if (!title || !description || !images_id || !images_path || !bucket_id) {
+			return NextResponse.json({ msg: "Missing fields" }, { status: 400 });
+		}
 		const supabase = await createClient();
-
-		const { data, error } = await supabase.from("posts").insert({ author_id, title, content }).select();
+		const { data, error } = await supabase
+			.from("class_posts")
+			.insert({ title, content: description, author_id: user.id, images_id, images_path, bucket_id, class: user.user_metadata.role.class })
+			.select();
 
 		if (error) throw error;
-		return NextResponse.json(data);
-	} catch (error) {
-		console.error(error);
+		return NextResponse.json(data, { status: 201 });
+	} catch (err) {
+		console.error(err);
 		return NextResponse.json({ msg: "Unexpected error occurred" }, { status: 500 });
 	}
 }

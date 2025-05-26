@@ -12,13 +12,15 @@ export async function POST(req: NextRequest) {
 		console.log("Received body:", body);
 
 		const { title, description, images_id, images_path, bucket_id } = body;
-		// const { title, description, images } = await req.json();
 
 		if (!title || !description || !images_id || !images_path || !bucket_id) {
 			return NextResponse.json({ msg: "Missing fields" }, { status: 400 });
 		}
 		const supabase = await createClient();
-		const { data, error } = await supabase.from("school_posts").insert({ title, content: description, author_id: user.id, images_id, images_path, bucket_id }).select();
+		const { data, error } = await supabase
+			.from("school_posts")
+			.insert({ title, content: description, author_id: user.id, images_id, images_path, bucket_id })
+			.select();
 
 		if (error) throw error;
 		return NextResponse.json(data, { status: 201 });

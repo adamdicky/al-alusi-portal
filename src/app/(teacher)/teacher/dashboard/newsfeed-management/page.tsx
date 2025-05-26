@@ -74,7 +74,7 @@ export default function page() {
 		}
 
 		getTeacherPosts();
-	}, [post]);
+	}, [post, showCreatePost]);
 
 	return (
 		<main className="col-span-4 p-4 bg-white border border-gray-200 rounded-lg w-full">
@@ -103,6 +103,7 @@ export default function page() {
 					<DeletePost type="class" close={() => setShowPost(false)} post={post} />
 				)
 			) : null}
+			{showCreatePost && <CreatePost postType="class_posts" close={() => setShowCreatePost(false)} />}
 		</main>
 	);
 }

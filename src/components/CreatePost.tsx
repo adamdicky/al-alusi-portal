@@ -26,7 +26,9 @@ export default function CreatePost({ close, postType }: CreatePostProps) {
 
 	useEffect(() => {
 		const fetchUser = async () => {
-			const { data: { user } } = await supabase.auth.getUser();
+			const {
+				data: { user },
+			} = await supabase.auth.getUser();
 			setUserId(user?.id ?? "Unknown");
 		};
 
@@ -35,10 +37,7 @@ export default function CreatePost({ close, postType }: CreatePostProps) {
 
 	const now = new Date();
 	const date = new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "short" }).format(now);
-	const time = new Intl.DateTimeFormat("en-GB", { hour: "numeric", minute: "2-digit", hour12: true })
-		.format(now)
-		.toLowerCase();
-
+	const time = new Intl.DateTimeFormat("en-GB", { hour: "numeric", minute: "2-digit", hour12: true }).format(now).toLowerCase();
 
 	const handleUploadClick = () => {
 		fileInputRef.current?.click();
@@ -70,17 +69,10 @@ export default function CreatePost({ close, postType }: CreatePostProps) {
 				formData.append("files", image);
 			});
 
-			const uploadResponse = await fetch("/api/uploadimage", {
+			const { images_path, images_id, bucket_id } = await apiFetch("/api/uploadimage", {
 				method: "POST",
 				body: formData,
 			});
-
-			if (!uploadResponse.ok) {
-				throw new Error("Image upload failed.");
-			}
-
-			const uploadedData = await uploadResponse.json();
-			const { images_path, images_id, bucket_id } = uploadedData;
 
 			console.log({
 				title,
@@ -120,7 +112,9 @@ export default function CreatePost({ close, postType }: CreatePostProps) {
 							<div className="w-10 h-10 rounded-full bg-gray-300" />
 							<div>
 								<p className="font-semibold text-black">{userId ?? "Unkown User"}</p>
-								<p className="text-sm text-gray-500">{date} &nbsp; {time}</p>
+								<p className="text-sm text-gray-500">
+									{date} &nbsp; {time}
+								</p>
 							</div>
 						</div>
 					</div>
