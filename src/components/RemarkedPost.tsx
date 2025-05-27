@@ -8,6 +8,8 @@ import Image from "next/image";
 import { apiFetch } from "@/utils/functions/fetch";
 import Textarea from "./ui/textarea";
 import Input from "./ui/input";
+import { Dialog } from "@headlessui/react";
+
 
 export default function RemarkedPost({
 	post,
@@ -22,6 +24,19 @@ export default function RemarkedPost({
 	const [description, setDescription] = useState<string>(post.content);
 	const [images, setImages] = useState<FileList | null>();
 	const [remarkText, setRemarkText] = useState<string>("");
+
+	const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+	const bucket = post.bucket_id;
+	const imagePaths = post.images_path ?? [];
+	const previewImages = imagePaths.slice(0, 3);
+
+	const [isOpen, setIsOpen] = useState(false);
+	const [selectedIndex, setSelectedIndex] = useState(0);
+
+	const handleImageClick = (index: number) => {
+		setSelectedIndex(index);
+		setIsOpen(true);
+	};
 
 	useEffect(() => {
 		async function getRemarkData() {
@@ -59,11 +74,25 @@ export default function RemarkedPost({
 		}
 	}
 
+	async function deletePost() {
+	try {
+		await apiFetch(`/api/newsfeed/class/post/delete/`, {
+			method: "POST",
+			body: JSON.stringify({id: post.id}),
+		});
+		close(); // closes the modal after deletion
+	} catch (error) {
+		console.error("Failed to delete post:", error);
+	}
+}
+
+
 	const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setImages(e.target.files);
 	};
 
 	return (
+		<>
 		<div className="fixed inset-0 bg-black/75 flex items-center justify-center z-50">
 			<div className="relative bg-white w-full max-w-3xl rounded-xl p-2 space-y-2">
 				<button type="button" onClick={close} className="block ml-auto cursor-pointer">
@@ -111,24 +140,80 @@ export default function RemarkedPost({
 							/>
 						</div>
 
-						<div className="">
-							<label className="block text-sm font-medium text-gray-700 mb-2">Attach Images</label>
-							<div className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-200 rounded-md cursor-pointer hover:border-gray-400 focus:border-gray-400">
-								<UploadSimple size={60} weight="bold" className="text-gray-500" />
-								<p className="text-gray-500 mt-2 text-sm">Click to upload images</p>
-								<Input id="image-upload" type="file" accept="image/*" multiple className="hidden" onChange={handleImageChange} />
+						{/* Image Preview */}
+						{imagePaths.length > 0 && (
+							<div className="w-full">
+								<label className="block text-sm font-medium text-gray-700 mb-2">Images</label>
+								<div className="grid grid-cols-3 gap-2 w-full rounded-xl overflow-hidden h-60 relative">
+									{previewImages.map((path, index) => (
+										<div
+											key={path}
+											className={`relative w-full h-full ${index === 2 && imagePaths.length > 3 ? "brightness-85" : ""} cursor-pointer`}
+											onClick={() => handleImageClick(index)}
+										>
+											<Image
+												src={`${supabaseUrl}/storage/v1/object/public/${bucket}/${path}`}
+												alt={`Post image ${index + 1}`}
+												fill
+												className="object-cover"
+											/>
+											{index === 2 && imagePaths.length > 3 && (
+												<div className="absolute inset-0 flex items-center justify-center bg-black/40 text-white text-lg font-bold">
+													+{imagePaths.length - 3} more
+												</div>
+											)}
+										</div>
+									))}
+								</div>
 							</div>
-						</div>
+						)}
 					</div>
 
 					<Textarea placeholder="Type your remark here..." value={remarkText} className="w-44 text-black resize-none" disabled />
 				</div>
 
 				{/* Action Buttons */}
-				<div className="flex justify-end gap-2">
+				<div className="flex justify-end">
+					<Button text="Delete Post" color="danger" onClick={deletePost} className="block ml-auto font-semibold text-sm" />
 					<Button text="Update Post" color="dark-blue" onClick={updatePost} className="font-semibold text-sm" />
 				</div>
 			</div>
 		</div>
+
+		{/* Fullscreen Image Viewer */}
+		<Dialog open={isOpen} onClose={() => setIsOpen(false)} className="relative z-50">
+				<div className="fixed inset-0 bg-black/50 flex items-center justify-center">
+					<div className="bg-white p-4 rounded-xl max-w-3xl w-full max-h-[80vh] overflow-auto">
+						<div className="flex justify-end">
+							<button
+								onClick={() => setIsOpen(false)}
+								className="text-sm text-red-500 hover:font-bold font-medium px-2 py-1"
+							>
+								Close ✕
+							</button>
+						</div>
+						{/* main image */}
+						<Image
+							src={`${supabaseUrl}/storage/v1/object/public/${bucket}/${imagePaths[selectedIndex]}`}
+							alt={`Selected image`}
+							width={800}
+							height={600}
+							className="object-contain w-full"
+						/>
+						{/* dots to switch image display */}
+						<div className="flex justify-center gap-2 mt-4">
+							{imagePaths.map((_, i) => (
+								<button
+									key={i}
+									className={`w-3 h-3 rounded-full ${i === selectedIndex ? "bg-black" : "bg-gray-400"}`}
+									onClick={() => setSelectedIndex(i)}
+								/>
+							))}
+						</div>
+					</div>
+				</div>
+			</Dialog>
+	</>
+		
 	);
 }

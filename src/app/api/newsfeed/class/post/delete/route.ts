@@ -19,13 +19,38 @@ export async function POST(req: NextRequest) {
 
     const supabase = await createClient();
 
-    // const { data, error } = await supabase
-    //     .from('posts')
-    //     .insert({author_id, title, content})
+    const { data: post, error: fetchError } = await supabase
+      .from("class_posts")
+      .select("status")
+      .eq("id", id)
+      .single();
 
-    const { error } = await supabase.from("posts").delete().eq("id", id);
+    if (fetchError || !post) {
+      return NextResponse.json(
+        {msg: "Post not found."},
+        { status: 404 }
+      )
+    };
 
-    if (error) throw error;
+    if (post.status === "remark") {
+      const { error: reviewError } = await supabase
+      .from("post_review")
+      .delete()
+      .eq("post_id", id);
+    
+    if (reviewError) throw reviewError;
+    }
+  
+    const { error: postError } = await supabase
+      .from("class_posts")
+      .delete()
+      .eq("id", id);
+
+    if (postError) throw postError;
+
+    // const { error } = await supabase.from("class_posts").delete().eq("id", id);
+    // if (error) throw error;
+
     return NextResponse.json({ msg: "Successfully deleted post." });
   } catch (error) {
     console.error(error);
