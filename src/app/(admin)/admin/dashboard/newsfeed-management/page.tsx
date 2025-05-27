@@ -98,7 +98,7 @@ export default function page() {
 		<main className="bg-white col-span-4 grid grid-cols-2 grid-rows-2 grid-flow-row gap-4 p-4 border border-gray-200 rounded-lg">
 			<div className="flex flex-col w-full space-y-2 my-3">
 				<div className="flex flex-row items-center justify-between">
-					<h5 className="font-semibold">Published School Newsfeed</h5>
+					<h5 className="font-semibold">Pending School Newsfeed</h5>
 				</div>
 				<div className="flex flex-col  items-center gap-3 h-77 bg-off-white border border-gray-200 p-2 rounded-lg overflow-y-scroll">
 					{pendingPosts &&

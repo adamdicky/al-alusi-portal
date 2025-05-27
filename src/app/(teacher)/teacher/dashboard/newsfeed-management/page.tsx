@@ -64,7 +64,7 @@ export default function page() {
 	useEffect(() => {
 		async function getTeacherPosts() {
 			try {
-				const posts: Tables<"class_posts">[] = await apiFetch("/api/newsfeed/class/post/get?sort=desc", {
+				const posts: Tables<"class_posts">[] = await apiFetch("/api/newsfeed/class/getpost-dashboard", {
 					method: "GET",
 				});
 				setTeacherPosts(posts);
