@@ -7,6 +7,7 @@ import CreatePost from "@/components/CreatePost";
 import { Tables } from "@/types/supabase/public.types";
 import { apiFetch } from "@/utils/functions/fetch";
 import DeletePost from "@/components/DeletePost";
+import DeletePostforTeacher from "@/components/DeletePostforTeacher"
 import OpenPost from "@/components/OpenPost";
 import RemarkedPost from "@/components/RemarkedPost";
 
@@ -100,7 +101,7 @@ export default function page() {
 				post?.status === "remark" ? (
 					<RemarkedPost close={() => setShowPost(false)} post={post} setPost={setPost} />
 				) : (
-					<DeletePost type="class" close={() => setShowPost(false)} post={post} />
+					<DeletePostforTeacher type="class" close={() => setShowPost(false)} post={post} />
 				)
 			) : null}
 			{showCreatePost && <CreatePost postType="class_posts" close={() => setShowCreatePost(false)} />}
