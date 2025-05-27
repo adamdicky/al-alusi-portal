@@ -17,6 +17,7 @@ export async function GET(req: NextRequest) {
 		let query = supabase
 			.from("class_posts")
 			.select()
+			.eq("status","approved")
 			.order("created_at", { ascending: sort === "asc" });
 
 		if (className) {
