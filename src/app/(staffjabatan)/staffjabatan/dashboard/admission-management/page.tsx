@@ -4,12 +4,16 @@ import Link from "next/link";
 import { Tables } from "@/types/supabase/public.types";
 import { apiFetch } from "@/utils/functions/fetch";
 import ModalP2 from "@/components/ModalP2";
+import ModalP3 from "@/components/ModalP3";
+import ModalP4 from "@/components/ModalP4";
 
 
 
 export default function page() {
 
     const [showModalP2, setShowModalP2] = useState(false);
+    const [showModalP3, setShowModalP3] = useState(false);
+    const [showModalP4, setShowModalP4] = useState(false);
 
     return (
         <main className="col-span-4 p-4 bg-white border border-gray-200 rounded-lg w-full">
@@ -58,6 +62,7 @@ export default function page() {
                             <button
                                 type="button"
                                 className="underline font-semibold ml-3"
+                                onClick={() => setShowModalP3(true)}
                             >
                                 view
                             </button>
@@ -74,6 +79,7 @@ export default function page() {
                             <button
                                 type="button"
                                 className="underline font-semibold ml-3"
+                                onClick={() => setShowModalP4(true)}
                             >
                                 view
                             </button>
@@ -113,6 +119,8 @@ export default function page() {
                     </div>
 
                     {showModalP2 && <ModalP2 onClose={() => setShowModalP2(false)} />}
+                    {showModalP3 && <ModalP3 onClose={() => setShowModalP3(false)} />}
+                    {showModalP4 && <ModalP4 onClose={() => setShowModalP4(false)} />}
                 </div>
             </div>
         </main>
