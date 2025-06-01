@@ -21,7 +21,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body className={`${poppins.variable} ${instrumentSans.variable} antialiased`}>
+			<body className={`${poppins.variable} ${instrumentSans.variable} antialiased bg-off-white`}>
 				<Navbar />
 				{children}
 				<Footer />
