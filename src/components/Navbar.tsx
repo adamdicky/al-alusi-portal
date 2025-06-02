@@ -16,7 +16,7 @@ const Navbar = () => {
 					<a href="/newsfeed/class">Class News</a>
 				</h6>
 				<h6>
-					<a href="">Student Application</a>
+					<a href="/studentapplication/admissionform">Student Application</a>
 				</h6>
 			</div>
 
