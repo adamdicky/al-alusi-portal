@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
         reviewed_by,
         reviewed_at: now,
         status: "accepted",
-        phase_status: "phase3",
+        phase_status: "3",
         last_updated: now,
       })
       .eq("id", application_id);

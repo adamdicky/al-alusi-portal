@@ -1,4 +1,3 @@
-// src/app/api/staffjabatan/set-schedule/route.ts
 import { authorized } from "@/utils/functions/auth";
 import { createClient } from "@/utils/supabase-connection/server";
 import { NextRequest, NextResponse } from "next/server";
@@ -23,7 +22,7 @@ export async function POST(req: NextRequest) {
 
     const updates: any = {
       testiv_date,
-      phase_status: "phase4",
+      phase_status: "4",
       last_updated: now,
     };
     if (interview_date) {
