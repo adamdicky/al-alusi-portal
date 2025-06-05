@@ -41,6 +41,7 @@ export async function updateSession(request: NextRequest) {
 		!pathname.startsWith("/api/auth/create-user") &&
 		!pathname.startsWith("/api/auth/login") &&
 		!pathname.startsWith("/api/auth/confirm-email") &&
+		!pathname.startsWith("/api/student-application/create") &&
 		pathname !== "/"
 	) {
 		console.log("Not Authenticated... re-routing");

@@ -26,9 +26,9 @@ export function generatePassword(): string {
 
 export async function POST(req: NextRequest) {
 	try {
-		// const user = await authorized("admin");
+		const user = await authorized("admin");
 
-		// if (!user) return NextResponse.json({ msg: "Unauthorized" }, { status: 401 });
+		if (!user) return NextResponse.json({ msg: "Unauthorized" }, { status: 401 });
 
 		const { email, fullname, role } = await req.json();
 

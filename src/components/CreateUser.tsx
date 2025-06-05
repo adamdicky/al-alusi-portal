@@ -15,7 +15,7 @@ const codes = ["UKM", "UPM", "USM"] as const;
 export default function CreateUser({ close }: { close: () => void }) {
 	const [email, setEmail] = useState("");
 	const [fullname, setFullname] = useState("");
-	const [role, setRole] = useState<"teacher" | "admin" | "staff jabatan">("teacher");
+	const [role, setRole] = useState<"teacher" | "admin" | "staff_jabatan">("teacher");
 	const [classroom, setClassroom] = useState<Classroom>();
 
 	const handleCreate = async () => {
@@ -59,12 +59,12 @@ export default function CreateUser({ close }: { close: () => void }) {
 						<label className="block font-semibold mb-1">Role</label>
 						<select
 							value={role}
-							onChange={(e) => setRole(e.target.value as "teacher" | "admin" | "staff jabatan")}
+							onChange={(e) => setRole(e.target.value as "teacher" | "admin" | "staff_jabatan")}
 							className="w-full border rounded px-3 py-2 capitalize"
 						>
 							<option value="teacher">Teacher</option>
 							<option value="admin">Admin</option>
-							<option value="staff jabatan">Staff Jabatan</option>
+							<option value="staff_jabatan">Staff Jabatan</option>
 						</select>
 					</div>
 

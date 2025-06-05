@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 const Navbar = () => {
@@ -10,13 +11,13 @@ const Navbar = () => {
 
 			<div className="flex flex-row items-center gap-10">
 				<h6>
-					<a href="/newsfeed/school">School News</a>
+					<Link href="/newsfeed/school">School News</Link>
 				</h6>
 				<h6>
-					<a href="/newsfeed/class">Class News</a>
+					<Link href="/newsfeed/class">Class News</Link>
 				</h6>
 				<h6>
-					<a href="/studentapplication/admissionform">Student Application</a>
+					<Link href="/student-application">Student Application</Link>
 				</h6>
 			</div>
 
