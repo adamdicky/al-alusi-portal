@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Button from "@/components/Button";
 import Input from "@/components/ui/input";
 import { apiFetch } from "@/utils/functions/fetch";
+import { classroomOptions } from "@/constants";
 
 interface Form {
 	requested_class: string;
@@ -122,7 +123,20 @@ export default function AdmissionFormPage() {
 			<h2 className="text-center font-bold text-2xl">SIRAJ Al-Alusi Application Form</h2>
 
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-				{renderInput("Requested Class", "requested_class")}
+				<div>
+					<label className="block font-semibold mb-1">Classroom</label>
+					<select
+						value={form.requested_class}
+						onChange={(e) => setForm((x) => ({ ...x, requested_class: e.target.value }))}
+						className="w-full border rounded-sm px-3 py-1.5"
+					>
+						{classroomOptions.map((cls) => (
+							<option key={cls} value={cls}>
+								{cls}
+							</option>
+						))}
+					</select>
+				</div>
 				{renderInput("For Year", "for_year")}
 				{renderInput("Requested School", "requested_school")}
 			</div>

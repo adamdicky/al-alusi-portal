@@ -91,21 +91,36 @@ export async function POST(req: NextRequest) {
 			primary_school_session: form.primary_session,
 		};
 
-		const { error: insertFatherError } = await supabase.from("father").insert({
-			...fatherInfo,
-		});
+		const { data: insertFatherInfo, error: insertFatherError } = await supabase
+			.from("father")
+			.insert({
+				...fatherInfo,
+			})
+			.select()
+			.limit(1)
+			.single();
 
 		if (insertFatherError) throw insertFatherError;
 
-		const { error: insertMotherError } = await supabase.from("mother").insert({
-			...motherInfo,
-		});
+		const { data: insertMotherInfo, error: insertMotherError } = await supabase
+			.from("mother")
+			.insert({
+				...motherInfo,
+			})
+			.select()
+			.limit(1)
+			.single();
 
 		if (insertMotherError) throw insertMotherError;
 
-		const { error: insertStudentError } = await supabase.from("student").insert({
-			...studentInfo,
-		});
+		const { data: insertStudentInfo, error: insertStudentError } = await supabase
+			.from("student")
+			.insert({
+				...studentInfo,
+			})
+			.select()
+			.limit(1)
+			.single();
 
 		if (insertStudentError) throw insertStudentError;
 
@@ -113,6 +128,9 @@ export async function POST(req: NextRequest) {
 			last_updated: new Date().toISOString(),
 			phase_status: 2,
 			is_reviewed: false,
+			father_information: insertFatherInfo.id,
+			mother_information: insertMotherInfo.id,
+			student_information: insertStudentInfo.id,
 		});
 
 		if (insertApplicationError) throw insertApplicationError;

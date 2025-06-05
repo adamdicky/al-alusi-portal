@@ -145,7 +145,6 @@ export default function StaffJabatanDashboard() {
 			{showModalP2 && selectedAppId && (
 				<ModalP2
 					applicationId={selectedAppId}
-					staffId={staffId}
 					onClose={() => {
 						setShowModalP2(false);
 						fetchApplications(); // refresh after close
@@ -166,7 +165,7 @@ export default function StaffJabatanDashboard() {
 			)}
 
 			{/* ModalP4 (Phase 4) */}
-			{showModalP4 && selectedAppId && (
+			{/* {showModalP4 && selectedAppId && (
 				<ModalP4
 					applicationId={selectedAppId}
 					staffId={staffId}
@@ -175,7 +174,7 @@ export default function StaffJabatanDashboard() {
 						fetchApplications();
 					}}
 				/>
-			)}
+			)} */}
 		</main>
 	);
 }

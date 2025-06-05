@@ -89,14 +89,12 @@ export default function ModalP3({ applicationId, staffId, onClose }: ModalP3Prop
 						</div>
 
 						{/* REPLACE CalendarDemo with a Calendar controlled by parent state */}
-						<div className="flex flex-col flex-wrap items-start gap-2 @md:flex-row">
-							<Calendar
-								mode="single"
-								selected={testDate}
-								onSelect={setTestDate}
-								className="rounded-md border flex flex-row justify-center shadow-sm w-full"
-							/>
-						</div>
+						<Calendar
+							mode="single"
+							selected={testDate}
+							onSelect={setTestDate}
+							className="rounded-md border flex flex-row justify-center shadow-sm w-full"
+						/>
 					</div>
 				</div>
 

@@ -1,94 +1,480 @@
 "use client";
 
-import React, { useState } from "react";
-import { X } from "@phosphor-icons/react";
+import React, { useEffect } from "react";
+import { CircleNotch, X } from "@phosphor-icons/react";
+import { useState } from "react";
+import Input from "@/components/ui/input";
 import Button from "./Button";
+import { apiFetch } from "@/utils/functions/fetch";
 
-type ModalP2Props = {
-	applicationId: string; // UUID of the application
-	staffId: string; // UUID of the staff jabatan
-	onClose: () => void;
-};
+//defaultValue
+const phases = ["Phase 1", "Phase 2", "Phase 3", "Phase 4"];
 
-export default function ModalP2({ applicationId, staffId, onClose }: ModalP2Props) {
-	const [isSubmitting, setIsSubmitting] = useState(false);
+interface Application {
+	father: {
+		name: string;
+		phone_number: string;
+		race: string;
+		nationality: string;
+		occupation: string;
+		income: string;
+		home_address: string;
+		office_address: string;
+		office_phone_number: string;
+	};
+	mother: {
+		name: string;
+		phone_number: string;
+		race: string;
+		nationality: string;
+		occupation: string;
+		income: string;
+		home_address: string;
+		office_address: string;
+		office_phone_number: string;
+	};
+	student: {
+		requested_class: string;
+		requested_year: string;
+		requested_school: string;
+		name: string;
+		birth_cert_number: string;
+		ic_number: string;
+		gender: string;
+		nationality: string;
+		date_of_birth: string;
+		place_of_birth: string;
+		kindergarten_name: string;
+		primary_school_name: string;
+		primary_school_session: string;
+	};
+}
 
-	async function handleMoveToPhase3() {
-		setIsSubmitting(true);
-		try {
-			const payload = {
-				application_id: applicationId,
-				reviewed_by: staffId,
-			};
+export default function ModalP2({ applicationId, onClose }: { applicationId: string; onClose: () => void }) {
+	const [selectedPhase, setSelectedPhase] = useState(1);
+	const [application, setApplication] = useState<Application>();
 
-			const res = await fetch("/api/staff-jabatan/move-phase3", {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify(payload),
-			});
+	useEffect(() => {
+		document.body.style.overflow = "hidden";
 
-			if (!res.ok) {
-				console.error(await res.text());
-				throw new Error("Failed to move to Phase 3");
+		async function getApplication() {
+			try {
+				const application: Application = await apiFetch(`/api/staff-jabatan/get-applications/${applicationId}`);
+
+				setApplication(application);
+			} catch (err) {
+				console.error("Failed to fetch application:", err);
+				alert("An error occurred while fetching the application.");
 			}
-
-			onClose();
-		} catch (err) {
-			console.error(err);
-			alert("Could not move to Phase 3. Please try again.");
-		} finally {
-			setIsSubmitting(false);
 		}
-	}
 
-	async function handleReject() {
-		if (!confirm("Are you sure you want to reject this application?")) return;
-		setIsSubmitting(true);
+		getApplication();
+
+		return () => {
+			document.body.style.overflow = "auto";
+		};
+	}, []);
+
+	async function moveToPhase3() {
 		try {
-			const payload = {
-				application_id: applicationId,
-				reviewed_by: staffId,
-			};
-
-			const res = await fetch("/api/staff-jabatan/reject-application", {
+			const moveToPhase3 = await apiFetch(`/api/staff-jabatan/move-phase3/`, {
 				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify(payload),
+				body: JSON.stringify({ application_id: applicationId }),
 			});
-
-			if (!res.ok) {
-				console.error(await res.text());
-				throw new Error("Failed to reject");
-			}
 
 			onClose();
 		} catch (err) {
-			console.error(err);
-			alert("Could not reject. Please try again.");
-		} finally {
-			setIsSubmitting(false);
+			console.error("Failed to fetch application:", err);
+			alert("An error occurred while fetching the application.");
 		}
 	}
 
 	return (
 		<div className="fixed inset-0 bg-black/75 flex items-center justify-center z-50">
-			<div className="bg-white w-full max-w-3xl rounded-xl p-4 relative space-y-4">
-				<button onClick={onClose} className="absolute top-3 right-3 text-gray-700 hover:text-black">
-					<X size={20} weight="bold" />
+			<div className="bg-white w-full max-h-[calc(100vh-4rem)] max-w-6xl rounded-xl p-2 relative space-y-2">
+				<button type="button" onClick={onClose} className="block ml-auto cursor-pointer">
+					<X size="18" weight="bold" className="text-black" />
 				</button>
 
-				<h2 className="text-lg font-semibold">Phase 2: Review Application</h2>
-				{/*display any application details here… */}
+				{/* CODE INSIDE HERE */}
+				<div className="flex flex-row w-full h-fit items-stretch justify-stretch gap-3">
+					{/* SIDEBAR */}
+					<div className="flex flex-col gap-4 border border-gray-200 rounded-md p-4 w-1/5 max-h-190 overflow-y-auto">
+						<div>
+							<strong>Student Application</strong>
+						</div>
 
-				<div className="flex justify-end space-x-2">
-					<Button text="Reject" color="danger" onClick={handleReject} disabled={isSubmitting} />
-					<Button
-						text={isSubmitting ? "Moving…" : "Accept & Move to Phase 3"}
-						color="dark-blue"
-						onClick={handleMoveToPhase3}
-						disabled={isSubmitting}
-					/>
+						<div className="space-y-4">
+							{phases.map((phase, index) => {
+								const isCurrent = selectedPhase === index + 1;
+								return (
+									<div
+										key={phase}
+										onClick={() => setSelectedPhase(index + 1)}
+										className="flex items-center gap-2 cursor-pointer group"
+									>
+										<CircleNotch
+											weight="bold"
+											size={22}
+											className={`${
+												isCurrent
+													? index === 0
+														? "text-blue-500"
+														: index === 1
+														? "text-[#FDD660]"
+														: index === 2
+														? "text-[#AF52DE]"
+														: index === 3
+														? "text-[#FF2D55]"
+														: ""
+													: "border-gray-400"
+											}`}
+										/>
+
+										<span className={`font-semibold`}>{phase}</span>
+									</div>
+								);
+							})}
+						</div>
+					</div>
+
+					{/* MAIN CONTENT */}
+					<div className="flex flex-col justify-start border border-gray-200 rounded-md p-4 w-4/5 max-h-[34rem] overflow-y-auto">
+						<div className="flex flex-col items-center w-full gap-4 p-3">
+							<form className="space-y-6 p-3 w-full">
+								{/* Requested Info */}
+								<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+									<div>
+										<label className="block text-sm font-medium mb-1">Requested Class</label>
+										<Input
+											readOnly
+											type="text"
+											defaultValue={application?.student.requested_class || ""}
+											className="w-full px-3 py-2 rounded-md"
+										/>
+									</div>
+									<div>
+										<label className="block text-sm font-medium mb-1">For Year</label>
+										<Input
+											readOnly
+											type="text"
+											defaultValue={application?.student.requested_year || ""}
+											className="w-full px-3 py-2 rounded-md"
+										/>
+									</div>
+								</div>
+
+								{/* Section Heading */}
+								<h2 className="text-center font-semibold text-sm">Father/Guardian Information</h2>
+
+								{/* Guardian Info */}
+								<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+									<div>
+										<label className="block text-sm font-medium mb-1">Father/Guardian Name</label>
+										<Input
+											readOnly
+											type="text"
+											defaultValue={application?.father.name || ""}
+											className="w-full px-3 py-2 rounded-md"
+										/>
+									</div>
+									<div>
+										<label className="block text-sm font-medium mb-1">Requested School</label>
+										<Input
+											readOnly
+											type="text"
+											defaultValue={application?.student.requested_school || ""}
+											className="w-full px-3 py-2 rounded-md"
+										/>
+									</div>
+
+									<div>
+										<label className="block text-sm font-medium mb-1">Phone Number</label>
+										<Input
+											readOnly
+											type="text"
+											defaultValue={application?.father.phone_number || ""}
+											className="w-full px-3 py-2 rounded-md"
+										/>
+									</div>
+
+									<div>
+										<label className="block text-sm font-medium mb-1">Race</label>
+										<Input
+											readOnly
+											type="text"
+											defaultValue={application?.father.race || ""}
+											className="w-full px-3 py-2 rounded-md"
+										/>
+									</div>
+
+									<div>
+										<label className="block text-sm font-medium mb-1">Nationality</label>
+										<Input
+											readOnly
+											type="text"
+											defaultValue={application?.father.nationality || ""}
+											className="w-full px-3 py-2 rounded-md"
+										/>
+									</div>
+									<div>
+										<label className="block text-sm font-medium mb-1">Occupation</label>
+										<Input
+											readOnly
+											type="text"
+											defaultValue={application?.father.occupation || ""}
+											className="w-full px-3 py-2 rounded-md"
+										/>
+									</div>
+
+									<div>
+										<label className="block text-sm font-medium mb-1">Income</label>
+										<Input
+											readOnly
+											type="text"
+											defaultValue={application?.father.income || ""}
+											className="w-full px-3 py-2 rounded-md"
+										/>
+									</div>
+
+									<div>
+										<label className="block text-sm font-medium mb-1">Office Phone Number</label>
+										<Input
+											readOnly
+											type="text"
+											defaultValue={application?.father.office_phone_number || ""}
+											className="w-full px-3 py-2 rounded-md"
+										/>
+									</div>
+								</div>
+
+								{/* Addresses */}
+								<div className="space-y-4">
+									<div>
+										<label className="block text-sm font-medium mb-1">Office Address</label>
+										<Input
+											type="text"
+											defaultValue={application?.father.office_address || ""}
+											className="w-full px-3 py-2 rounded-md"
+										/>
+									</div>
+									<div>
+										<label className="block text-sm font-medium mb-1">Home Address</label>
+										<Input
+											type="text"
+											defaultValue={application?.father.home_address || ""}
+											className="w-full px-3 py-2 rounded-md"
+										/>
+									</div>
+								</div>
+
+								{/* Section Heading */}
+								<h2 className="text-center font-semibold text-sm">Mother/Guardian Information</h2>
+
+								{/* Mother Info */}
+								<div>
+									<label className="block text-sm font-medium mb-1">Mother/Guardian Name</label>
+									<Input
+										readOnly
+										type="text"
+										defaultValue={application?.mother.name || ""}
+										className="w-full px-3 py-2 rounded-md"
+									/>
+								</div>
+								<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+									<div>
+										<label className="block text-sm font-medium mb-1">Phone Number</label>
+										<Input
+											readOnly
+											type="text"
+											defaultValue={application?.mother.phone_number || ""}
+											className="w-full px-3 py-2 rounded-md"
+										/>
+									</div>
+
+									<div>
+										<label className="block text-sm font-medium mb-1">Race</label>
+										<Input
+											readOnly
+											type="text"
+											defaultValue={application?.mother.race || ""}
+											className="w-full px-3 py-2 rounded-md"
+										/>
+									</div>
+
+									<div>
+										<label className="block text-sm font-medium mb-1">Nationality</label>
+										<Input
+											readOnly
+											type="text"
+											defaultValue={application?.mother.nationality || ""}
+											className="w-full px-3 py-2 rounded-md"
+										/>
+									</div>
+									<div>
+										<label className="block text-sm font-medium mb-1">Occupation</label>
+										<Input
+											readOnly
+											type="text"
+											defaultValue={application?.mother.occupation || ""}
+											className="w-full px-3 py-2 rounded-md"
+										/>
+									</div>
+
+									<div>
+										<label className="block text-sm font-medium mb-1">Income</label>
+										<Input
+											readOnly
+											type="text"
+											defaultValue={application?.mother.income || ""}
+											className="w-full px-3 py-2 rounded-md"
+										/>
+									</div>
+
+									<div>
+										<label className="block text-sm font-medium mb-1">Office Phone Number</label>
+										<Input
+											readOnly
+											type="text"
+											defaultValue={application?.mother.office_phone_number || ""}
+											className="w-full px-3 py-2 rounded-md"
+										/>
+									</div>
+								</div>
+
+								{/* Addresses */}
+								<div className="space-y-4">
+									<div>
+										<label className="block text-sm font-medium mb-1">Office Address</label>
+										<Input
+											type="text"
+											defaultValue={application?.mother.office_address || ""}
+											className="w-full px-3 py-2 rounded-md"
+										/>
+									</div>
+									<div>
+										<label className="block text-sm font-medium mb-1">Home Address</label>
+										<Input
+											type="text"
+											defaultValue={application?.mother.home_address || ""}
+											className="w-full px-3 py-2 rounded-md"
+										/>
+									</div>
+								</div>
+
+								{/* Section Heading */}
+								<h2 className="text-center font-semibold text-sm">Student Details</h2>
+
+								{/* Student Info */}
+								<div>
+									<label className="block text-sm font-medium mb-1">Student Name</label>
+									<Input
+										readOnly
+										type="text"
+										defaultValue={application?.student.name || ""}
+										className="w-full px-3 py-2 rounded-md"
+									/>
+								</div>
+								<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+									<div>
+										<label className="block text-sm font-medium mb-1">Birth Certificate Number</label>
+										<Input
+											readOnly
+											type="text"
+											defaultValue={application?.student.birth_cert_number || ""}
+											className="w-full px-3 py-2 rounded-md"
+										/>
+									</div>
+
+									<div>
+										<label className="block text-sm font-medium mb-1">IC Number</label>
+										<Input
+											readOnly
+											type="text"
+											defaultValue={application?.student.ic_number || ""}
+											className="w-full px-3 py-2 rounded-md"
+										/>
+									</div>
+
+									<div>
+										<label className="block text-sm font-medium mb-1">Gender</label>
+										<Input
+											readOnly
+											type="text"
+											defaultValue={application?.student.gender || ""}
+											className="w-full px-3 py-2 rounded-md"
+										/>
+									</div>
+									<div>
+										<label className="block text-sm font-medium mb-1">Nationality</label>
+										<Input
+											readOnly
+											type="text"
+											defaultValue={application?.student.nationality || ""}
+											className="w-full px-3 py-2 rounded-md"
+										/>
+									</div>
+
+									<div>
+										<label className="block text-sm font-medium mb-1">Date of Birth</label>
+										<Input
+											readOnly
+											type="text"
+											defaultValue={application?.student.date_of_birth || ""}
+											className="w-full px-3 py-2 rounded-md"
+										/>
+									</div>
+
+									<div>
+										<label className="block text-sm font-medium mb-1">Place of Birth</label>
+										<Input
+											readOnly
+											type="text"
+											defaultValue={application?.student.place_of_birth || ""}
+											className="w-full px-3 py-2 rounded-md"
+										/>
+									</div>
+								</div>
+
+								<div>
+									<label className="block text-sm font-medium mb-1">Kindergarten Name</label>
+									<Input
+										readOnly
+										type="text"
+										defaultValue={application?.student.kindergarten_name || ""}
+										className="w-full px-3 py-2 rounded-md"
+									/>
+								</div>
+
+								<div>
+									<label className="block text-sm font-medium mb-1">Primary School Name</label>
+									<Input
+										readOnly
+										type="text"
+										defaultValue={application?.student.primary_school_name || ""}
+										className="w-full px-3 py-2 rounded-md"
+									/>
+								</div>
+
+								<div>
+									<label className="block text-sm font-medium mb-1">Primary School Session</label>
+									<Input
+										readOnly
+										type="text"
+										defaultValue={application?.student.primary_school_session || ""}
+										className="w-full px-3 py-2 rounded-md"
+									/>
+								</div>
+							</form>
+						</div>
+					</div>
 				</div>
+
+				<div className="flex flex-row justify-end-safe gap-4">
+					<Button onClick={moveToPhase3} text="Move to Phase 3" color="dark-blue" />
+					<Button text="Reject" color="danger" />
+				</div>
+				{/* CODE INSIDE HERE */}
 			</div>
 		</div>
 	);

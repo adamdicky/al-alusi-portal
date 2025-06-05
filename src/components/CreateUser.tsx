@@ -9,9 +9,6 @@ import Button from "@/components/Button";
 import { apiFetch } from "@/utils/functions/fetch";
 import { Classroom, classroomOptions } from "@/constants";
 
-const levels = [1, 2, 3, 4, 5, 6];
-const codes = ["UKM", "UPM", "USM"] as const;
-
 export default function CreateUser({ close }: { close: () => void }) {
 	const [email, setEmail] = useState("");
 	const [fullname, setFullname] = useState("");
@@ -20,7 +17,7 @@ export default function CreateUser({ close }: { close: () => void }) {
 
 	const handleCreate = async () => {
 		try {
-			const response = await fetch("/api/auth/create-user", {
+			const response = await apiFetch("/api/auth/create-user", {
 				method: "POST",
 				body: JSON.stringify({
 					email,
@@ -28,8 +25,6 @@ export default function CreateUser({ close }: { close: () => void }) {
 					role: role === "teacher" ? { name: "teacher", class: classroom } : role,
 				}),
 			});
-
-			if (!response.ok) throw new Error("Failed to create user");
 
 			close();
 		} catch (error) {
