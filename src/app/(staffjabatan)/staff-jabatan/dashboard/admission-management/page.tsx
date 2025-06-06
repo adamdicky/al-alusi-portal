@@ -86,8 +86,10 @@ export default function StaffJabatanDashboard() {
 							onChange={(e) => setStatusFilter(e.target.value)}
 						>
 							<option value="All">Status: All</option>
-							<option value="pending">Status: Pending</option>
 							<option value="accepted">Status: Accepted</option>
+							<option value="2">Status: Phase 02</option>
+							<option value="3">Status: Phase 03</option>
+							<option value="4">Status: Phase 04</option>
 							<option value="rejected">Status: Rejected</option>
 						</select>
 						<select
@@ -124,11 +126,11 @@ export default function StaffJabatanDashboard() {
 									{app.phase_status === "3" && <strong className="text-[#AF52DE]">Phase 03</strong>}
 									{app.phase_status === "4" && <strong className="text-[#FF2D55]">Phase 04</strong>}
 
-									{/* If status === accepted but phase < 4, show “Accepted” */}
-									{app.status === "accepted" && app.phase_status !== "4" && <strong className="text-[#34C759]">Accepted</strong>}
-									{app.status === "rejected" && <strong className="text-[#B3261E]">Rejected</strong>}
+									{app.phase_status === "accepted" && app.phase_status !== "4" && (
+										<strong className="text-[#34C759]">Accepted</strong>
+									)}
+									{app.phase_status === "rejected" && <strong className="text-[#B3261E]">Rejected</strong>}
 
-									{/* Only show “view” for phases 2, 3, or 4 */}
 									{(app.phase_status === "2" || app.phase_status === "3" || app.phase_status === "4") && (
 										<button type="button" className="underline font-semibold ml-3" onClick={() => openModal(app)}>
 											view
@@ -165,16 +167,15 @@ export default function StaffJabatanDashboard() {
 			)}
 
 			{/* ModalP4 (Phase 4) */}
-			{/* {showModalP4 && selectedAppId && (
+			{showModalP4 && selectedAppId && (
 				<ModalP4
 					applicationId={selectedAppId}
-					staffId={staffId}
 					onClose={() => {
 						setShowModalP4(false);
 						fetchApplications();
 					}}
 				/>
-			)} */}
+			)}
 		</main>
 	);
 }

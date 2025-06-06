@@ -25,7 +25,6 @@ export async function POST(req: NextRequest) {
 				is_reviewed: true,
 				reviewed_by: user.id,
 				reviewed_at: now,
-				status: "pending",
 				phase_status: "3",
 				last_updated: now,
 			})

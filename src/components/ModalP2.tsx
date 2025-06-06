@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { CircleNotch, X } from "@phosphor-icons/react";
+import { CircleNotch, Notches, X } from "@phosphor-icons/react";
 import { useState } from "react";
 import Input from "@/components/ui/input";
 import Button from "./Button";
@@ -51,7 +51,6 @@ interface Application {
 }
 
 export default function ModalP2({ applicationId, onClose }: { applicationId: string; onClose: () => void }) {
-	const [selectedPhase, setSelectedPhase] = useState(1);
 	const [application, setApplication] = useState<Application>();
 
 	useEffect(() => {
@@ -89,6 +88,19 @@ export default function ModalP2({ applicationId, onClose }: { applicationId: str
 		}
 	}
 
+	async function rejectApplication() {
+		try {
+			await apiFetch(`/api/staff-jabatan/reject-application/${applicationId}`, {
+				method: "PATCH",
+			});
+
+			onClose();
+		} catch (error) {
+			console.error(error);
+			alert("Unexpected Error Occurred");
+		}
+	}
+
 	return (
 		<div className="fixed inset-0 bg-black/75 flex items-center justify-center z-50">
 			<div className="bg-white w-full max-h-[calc(100vh-4rem)] max-w-6xl rounded-xl p-2 relative space-y-2">
@@ -106,29 +118,12 @@ export default function ModalP2({ applicationId, onClose }: { applicationId: str
 
 						<div className="space-y-4">
 							{phases.map((phase, index) => {
-								const isCurrent = selectedPhase === index + 1;
 								return (
-									<div
-										key={phase}
-										onClick={() => setSelectedPhase(index + 1)}
-										className="flex items-center gap-2 cursor-pointer group"
-									>
-										<CircleNotch
+									<div key={phase} className="flex items-center gap-2 cursor-pointer group">
+										<Notches
 											weight="bold"
 											size={22}
-											className={`${
-												isCurrent
-													? index === 0
-														? "text-blue-500"
-														: index === 1
-														? "text-[#FDD660]"
-														: index === 2
-														? "text-[#AF52DE]"
-														: index === 3
-														? "text-[#FF2D55]"
-														: ""
-													: "border-gray-400"
-											}`}
+											className={`${index === 0 ? "text-blue-500" : index === 1 ? "text-[#FDD660]" : "border-gray-400"}`}
 										/>
 
 										<span className={`font-semibold`}>{phase}</span>
@@ -472,7 +467,7 @@ export default function ModalP2({ applicationId, onClose }: { applicationId: str
 
 				<div className="flex flex-row justify-end-safe gap-4">
 					<Button onClick={moveToPhase3} text="Move to Phase 3" color="dark-blue" />
-					<Button text="Reject" color="danger" />
+					<Button onClick={rejectApplication} text="Reject" color="danger" />
 				</div>
 				{/* CODE INSIDE HERE */}
 			</div>

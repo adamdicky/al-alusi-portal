@@ -2,15 +2,16 @@ import { authorized } from "@/utils/functions/auth";
 import { createClient } from "@/utils/supabase-connection/server";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: NextRequest) {
+export async function PATCH(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
 	try {
 		const user = await authorized("staff_jabatan");
 		if (!user) {
 			return NextResponse.json({ msg: "Unauthorized" }, { status: 401 });
 		}
 
-		const { application_id, invitation_date, testiv_mark } = await req.json();
-		if (!application_id || !invitation_date || !testiv_mark) {
+		const { id } = await params;
+
+		if (!id) {
 			return NextResponse.json({ msg: "Missing fields" }, { status: 400 });
 		}
 
@@ -21,18 +22,17 @@ export async function POST(req: NextRequest) {
 			.from("application")
 			.update({
 				is_reviewed: true,
+				reviewed_by: user.id,
 				reviewed_at: now,
-				invitation_date,
-				testiv_mark,
-				phase_status: "accepted",
+				phase_status: "rejected",
 				last_updated: now,
 			})
-			.eq("id", application_id);
+			.eq("id", id);
 
 		if (error) throw error;
-		return NextResponse.json({ msg: "Student approved (invitation date set)" }, { status: 200 });
+		return NextResponse.json({ msg: "Application rejected" }, { status: 200 });
 	} catch (err) {
 		console.error(err);
-		return NextResponse.json({ msg: "Unable to approve student" }, { status: 500 });
+		return NextResponse.json({ msg: "Unable to reject application" }, { status: 500 });
 	}
 }

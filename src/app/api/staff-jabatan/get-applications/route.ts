@@ -20,7 +20,7 @@ export async function GET(request: Request) {
 		let query = supabase.from("application").select();
 
 		if (statusFilter && statusFilter !== "All") {
-			query = query.eq("status", statusFilter);
+			query = query.eq("phase_status", statusFilter);
 		}
 		query = query.order("created_at", { ascending: orderParam === "asc" });
 
