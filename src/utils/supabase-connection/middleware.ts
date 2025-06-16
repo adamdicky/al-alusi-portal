@@ -56,7 +56,7 @@ export async function updateSession(request: NextRequest) {
 		console.log("Authenticated... re-routing");
 
 		const url = request.nextUrl.clone();
-		const role = user?.user_metadata.role || user?.user_metadata.role.name;
+		const role = user?.user_metadata.role.name || user?.user_metadata.role;
 
 		switch (role) {
 			case "admin":
@@ -76,7 +76,7 @@ export async function updateSession(request: NextRequest) {
 		console.log("Unauthorized for Admin route... re-routing");
 
 		const url = request.nextUrl.clone();
-		const role = user?.user_metadata.role || user?.user_metadata.role.name;
+		const role = user?.user_metadata.role.name || user?.user_metadata.role;
 
 		switch (role) {
 			case "admin":
@@ -96,7 +96,7 @@ export async function updateSession(request: NextRequest) {
 		console.log("Unauthorized for Teacher route... re-routing");
 
 		const url = request.nextUrl.clone();
-		const role = user?.user_metadata.role || user?.user_metadata.role.name;
+		const role = user?.user_metadata.role.name || user?.user_metadata.role;
 
 		switch (role) {
 			case "admin":
@@ -116,7 +116,7 @@ export async function updateSession(request: NextRequest) {
 		console.log("Unauthorized for Admin route... re-routing");
 
 		const url = request.nextUrl.clone();
-		const role = user?.user_metadata.role || user?.user_metadata.role.name;
+		const role = user?.user_metadata.role.name || user?.user_metadata.role;
 
 		switch (role) {
 			case "admin":
