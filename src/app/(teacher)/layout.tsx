@@ -34,7 +34,6 @@ export default function RootLayout({
 								</Link>
 							</h4>
 						</div>
-
 						<ul className="w-full space-y-3 text-black ">
 							<li className="flex flex-row items-center gap-3 rounded-xs py-1 px-1.5  hover:bg-off-white">
 								<Newspaper size={24} className="text-black" />
@@ -43,6 +42,7 @@ export default function RootLayout({
 								</Link>
 							</li>
 						</ul>
+						z
 					</aside>
 					{children}
 				</section>

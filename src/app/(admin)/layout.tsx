@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import Image from "next/image";
 import Link from "next/link";
 import { Newspaper, Users } from "@phosphor-icons/react/dist/ssr";
+import Logout from "@/components/Logout";
 
 const poppins = Poppins({ subsets: ["latin"], weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"], variable: "--font-p" });
 
@@ -24,7 +25,7 @@ export default function RootLayout({
 	return (
 		<html>
 			<body className={`${poppins.variable} ${instrumentSans.variable} antialiased space-y-4 bg-off-white`}>
-				<section className="grid grid-cols-5 grid-flow-row gap-4 p-3 h-[90vh]">
+				<section className="grid grid-cols-5 grid-flow-row gap-4 p-3">
 					<aside className="flex flex-col items-center h-full gap-4 bg-white p-4 border border-gray-200 rounded-lg">
 						<div className="flex flex-row items-center gap-1">
 							<Image src="/logo.png" alt="" width={55} height={55} />
@@ -34,7 +35,6 @@ export default function RootLayout({
 								</Link>
 							</h4>
 						</div>
-
 						<ul className="w-full space-y-3 text-black ">
 							<li className="flex flex-row items-center gap-3 rounded-xs py-1 px-1.5  hover:bg-off-white">
 								<Newspaper size={24} className="text-black" />
@@ -49,6 +49,7 @@ export default function RootLayout({
 								</Link>
 							</li>
 						</ul>
+						<Logout />
 					</aside>
 					{children}
 				</section>

@@ -5,7 +5,8 @@ import "@/app/globals.css";
 import Footer from "@/components/Footer";
 import Image from "next/image";
 import Link from "next/link";
-import { Newspaper, Users, Student } from "@phosphor-icons/react/dist/ssr";
+import { Student } from "@phosphor-icons/react/dist/ssr";
+import Logout from "@/components/Logout";
 
 const poppins = Poppins({ subsets: ["latin"], weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"], variable: "--font-p" });
 
@@ -43,6 +44,7 @@ export default function RootLayout({
 								</Link>
 							</li>
 						</ul>
+						<Logout />
 					</aside>
 					{children}
 				</section>

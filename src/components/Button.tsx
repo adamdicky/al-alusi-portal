@@ -57,17 +57,18 @@ export default function Button({
 					color === "dark-blue"
 						? "bg-dark-blue text-white"
 						: color === "off-white"
-						? "bg-off-white text-black"
-						: color === "border-white"
-						? "bg-white text-black"
-						: color === "danger"
-						? "bg-danger text-white"
-						: ""
+							? "bg-off-white text-black"
+							: color === "border-white"
+								? "bg-white text-black"
+								: color === "danger"
+									? "bg-danger text-white"
+									: ""
 				} ${color === "off-white" || color === "border-white" ? "border-dark" : "border-transparent"} ${
 					iconSide === "left" ? "flex-row" : "flex flex-row-reverse"
 				} flex items-center justify-center px-4 py-2 border-2 rounded-[4px] font-medium gap-2 transition-transform duration-300 cursor-pointer hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed`,
 				className
 			)}
+			disabled={loading}
 		>
 			{iconName && (
 				<Icon

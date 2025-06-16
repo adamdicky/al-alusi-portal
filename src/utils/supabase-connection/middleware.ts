@@ -52,11 +52,82 @@ export async function updateSession(request: NextRequest) {
 	}
 
 	//? User Authenticated
-	if (user && pathname.startsWith("/admin/login")) {
+	if (user && (pathname.startsWith("/admin/login") || pathname.startsWith("/newsfeed"))) {
 		console.log("Authenticated... re-routing");
 
 		const url = request.nextUrl.clone();
-		url.pathname = "/newsfeed/school";
+		const role = user?.user_metadata.role || user?.user_metadata.role.name;
+
+		switch (role) {
+			case "admin":
+				url.pathname = "/admin/dashboard/newsfeed-management";
+				break;
+			case "teacher":
+				url.pathname = "/teacher/dashboard/newsfeed-management";
+				break;
+			case "staff_jabatan":
+				url.pathname = "/staff-jabatan/dashboard/admission-management";
+		}
+		return NextResponse.redirect(url);
+	}
+
+	//? Admin User Authenticated
+	if (user && user?.user_metadata.role !== "admin" && pathname.startsWith("/admin")) {
+		console.log("Unauthorized for Admin route... re-routing");
+
+		const url = request.nextUrl.clone();
+		const role = user?.user_metadata.role || user?.user_metadata.role.name;
+
+		switch (role) {
+			case "admin":
+				url.pathname = "/admin/dashboard/newsfeed-management";
+				break;
+			case "teacher":
+				url.pathname = "/teacher/dashboard/newsfeed-management";
+				break;
+			case "staff_jabatan":
+				url.pathname = "/staff-jabatan/dashboard/admission-management";
+		}
+		return NextResponse.redirect(url);
+	}
+
+	//? Teacher User Authenticated
+	if (user && user?.user_metadata.role?.name !== "teacher" && pathname.startsWith("/teacher")) {
+		console.log("Unauthorized for Teacher route... re-routing");
+
+		const url = request.nextUrl.clone();
+		const role = user?.user_metadata.role || user?.user_metadata.role.name;
+
+		switch (role) {
+			case "admin":
+				url.pathname = "/admin/dashboard/newsfeed-management";
+				break;
+			case "teacher":
+				url.pathname = "/teacher/dashboard/newsfeed-management";
+				break;
+			case "staff_jabatan":
+				url.pathname = "/staff-jabatan/dashboard/admission-management";
+		}
+		return NextResponse.redirect(url);
+	}
+
+	//? Staff Jabatan User Authenticated
+	if (user && user?.user_metadata.role !== "staff_jabatan" && pathname.startsWith("/staff-jabatan")) {
+		console.log("Unauthorized for Admin route... re-routing");
+
+		const url = request.nextUrl.clone();
+		const role = user?.user_metadata.role || user?.user_metadata.role.name;
+
+		switch (role) {
+			case "admin":
+				url.pathname = "/admin/dashboard/newsfeed-management";
+				break;
+			case "teacher":
+				url.pathname = "/teacher/dashboard/newsfeed-management";
+				break;
+			case "staff_jabatan":
+				url.pathname = "/staff-jabatan/dashboard/admission-management";
+		}
 		return NextResponse.redirect(url);
 	}
 
