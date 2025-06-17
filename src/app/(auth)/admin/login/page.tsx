@@ -4,6 +4,7 @@ import Button from "@/components/Button";
 import Input from "@/components/ui/input";
 import { apiFetch } from "@/utils/functions/fetch";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -63,8 +64,15 @@ export default function page() {
 					</div>
 					<Button type="submit" onClick={login} text="Login Al-Alusi Portal" className="block mx-auto text-sm font-semibold" />
 					<div className="text-sm text-center text-gray-500">
+						<Link href="/admin/login/forgot-password" className="underline font-medium">
+							Forgot Password
+						</Link>
+					</div>
+					<div className="text-sm text-center text-gray-500">
 						<p>Don&apos;t have an account?</p>
-						<p className="underline font-medium">Contact SIRAJ Al-Alusi Admin</p>
+						<a href="mailto:someemail@gmail.com" className="underline font-medium">
+							Contact SIRAJ Al-Alusi Admin
+						</a>
 					</div>
 				</form>
 			</div>
