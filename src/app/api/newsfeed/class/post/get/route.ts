@@ -4,10 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
 	try {
-		// const user = await authorized("teacher");
-
-		// if (!user) return NextResponse.json({ msg: "Unauthorized" }, { status: 403 });
-
+		
 		const supabase = await createClient();
 
 		const { searchParams } = new URL(req.nextUrl);
@@ -23,11 +20,6 @@ export async function GET(req: NextRequest) {
 		if (className) {
 			query = query.eq("class", className);
 		}
-
-		// const { data, error } = await supabase
-		//   .from("class_posts")
-		//   .select()
-		//   .order("created_at", { ascending: sort === "asc" });
 
 		const { data, error } = await query;
 

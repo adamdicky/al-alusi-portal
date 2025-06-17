@@ -28,8 +28,22 @@ export default function CreatePost({ close, postType }: CreatePostProps) {
 		const fetchUser = async () => {
 			const {
 				data: { user },
-			} = await supabase.auth.getUser();
-			setUserId(user?.id ?? "Unknown");
+		} = await supabase.auth.getUser();
+
+		if (user?.id) {
+			const { data: profile, error } = await supabase
+				.from("profiles")
+				.select("full_name")
+				.eq("id", user.id)
+				.single();
+
+			if (error) {
+				console.error("Error fetching profile:", error);
+				setUserId("Unknown");
+			} else {
+				setUserId(profile?.full_name ?? "Unknown");
+			}
+		}
 		};
 
 		fetchUser();
@@ -111,7 +125,7 @@ export default function CreatePost({ close, postType }: CreatePostProps) {
 						<div className="flex items-center space-x-3">
 							<div className="w-10 h-10 rounded-full bg-gray-300" />
 							<div>
-								<p className="font-semibold text-black">{userId ?? "Unkown User"}</p>
+								<p className="font-semibold text-black">{userId}</p>
 								<p className="text-sm text-gray-500">
 									{date} &nbsp; {time}
 								</p>

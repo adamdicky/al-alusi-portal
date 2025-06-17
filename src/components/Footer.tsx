@@ -11,13 +11,13 @@ const Footer = () => {
 					<b>General</b>
 				</li>
 				<li>
-					<a href="/schoolnewsfeed">Schools Newsfeed</a>
+					<a href="/newsfeed/school">Schools Newsfeed</a>
 				</li>
 				<li>
-					<a href="/classnewsfeed">Class Newsfeed</a>
+					<a href="/newsfeed/class">Class Newsfeed</a>
 				</li>
 				<li>
-					<a href="/studentapplication">Student Application</a>
+					<a href="/student-application">Student Application</a>
 				</li>
 			</ul>
 

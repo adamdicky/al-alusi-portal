@@ -10,7 +10,7 @@ export const EmailTemplatePhase2Accept: React.FC<Readonly<EmailTemplateProps>> =
     fathername, mothername, studentname
 }) => (
    <div style={{ fontFamily: 'Arial, sans-serif', lineHeight: 1.6 }}>
-    <h2>Congratulations from SIRAJ Al-Alusi!</h2>
+    <h2>Application is accepted.</h2>
     <p>
       Dear <strong>Mr. {fathername}</strong> and <strong>Mrs. {mothername}</strong>. We are delighted to inform you that your application for student <strong>{studentname}</strong> has been accepted. 🎉
     </p>

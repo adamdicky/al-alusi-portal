@@ -23,33 +23,37 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html>
+		<html className="h-full">
 			<body className={`${poppins.variable} ${instrumentSans.variable} antialiased space-y-4 bg-off-white`}>
 				<section className="grid grid-cols-5 grid-flow-row gap-4 p-3">
 					<aside className="flex flex-col items-center h-full gap-4 bg-white p-4 border border-gray-200 rounded-lg">
-						<div className="flex flex-row items-center gap-1">
-							<Image src="/logo.png" alt="" width={55} height={55} />
-							<h4>
-								<Link href="/" className="hidden lg:block font-semibold text-black">
-									Al-Alusi Portal
-								</Link>
-							</h4>
+						<div className="flex flex-col items-center gap-4 flex-grow">
+							<div className="flex flex-row items-center gap-1">
+								<Image src="/logo.png" alt="" width={55} height={55} />
+								<h4>
+									<Link href="/" className="hidden lg:block font-semibold text-black">
+										Al-Alusi Portal
+									</Link>
+								</h4>`
+							</div>
+							<ul className="w-full space-y-3 text-black ">
+								<li className="flex flex-row items-center gap-3 rounded-xs py-1 px-1.5  hover:bg-off-white hover:border-1 hover:rounded-sm">
+									<Newspaper size={24} className="text-black" />
+									<Link href={"/admin/dashboard/newsfeed-management"} className="w-full text-left">
+										Newsfeed Management
+									</Link>
+								</li>
+								<li className="flex flex-row items-center gap-3 rounded-xs py-1 px-1.5  hover:bg-off-white hover:border-1 hover:rounded-sm">
+									<Users size={24} className="text-black" />
+									<Link href={"/admin/dashboard/user-management"} className="w-full text-left">
+										User Management
+									</Link>
+								</li>
+							</ul>
 						</div>
-						<ul className="w-full space-y-3 text-black ">
-							<li className="flex flex-row items-center gap-3 rounded-xs py-1 px-1.5  hover:bg-off-white">
-								<Newspaper size={24} className="text-black" />
-								<Link href={"/admin/dashboard/newsfeed-management"} className="w-full text-left">
-									Newsfeed Management
-								</Link>
-							</li>
-							<li className="flex flex-row items-center gap-3 rounded-xs py-1 px-1.5  hover:bg-off-white">
-								<Users size={24} className="text-black" />
-								<Link href={"/admin/dashboard/user-management"} className="w-full text-left">
-									User Management
-								</Link>
-							</li>
-						</ul>
-						<Logout />
+						<div>
+							<Logout />
+						</div>
 					</aside>
 					{children}
 				</section>
