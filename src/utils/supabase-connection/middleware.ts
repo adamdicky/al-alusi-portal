@@ -38,6 +38,10 @@ export async function updateSession(request: NextRequest) {
 	if (
 		!user &&
 		!pathname.startsWith("/admin/login") &&
+		!pathname.startsWith("/newsfeed") &&
+		!pathname.startsWith("/student-application") &&
+		!pathname.startsWith("/api/newsfeed") &&
+		!pathname.startsWith("/api/student-application") &&
 		!pathname.startsWith("/api/auth/create-user") &&
 		!pathname.startsWith("/api/auth/login") &&
 		!pathname.startsWith("/api/auth/confirm-email") &&
