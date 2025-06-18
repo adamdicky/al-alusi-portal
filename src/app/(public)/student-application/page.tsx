@@ -43,7 +43,7 @@ interface Form {
 
 export default function AdmissionFormPage() {
 	const [form, setForm] = useState<Form>({
-		requested_class: "",
+		requested_class: "", 
 		for_year: "",
 		requested_school: "",
 		email_contact: "",
@@ -132,6 +132,11 @@ export default function AdmissionFormPage() {
 						onChange={(e) => setForm((x) => ({ ...x, requested_class: e.target.value }))}
 						className="w-full border rounded-sm px-3 py-1.5"
 					>
+						
+  						<option value="" disabled hidden>
+    						Select Classroom
+  						</option>
+
 						{classroomOptions.map((cls) => (
 							<option key={cls} value={cls}>
 								{cls}
@@ -151,7 +156,7 @@ export default function AdmissionFormPage() {
 					{renderInput("Phone Number", "father_phone", "text", "012-3456789")}
 					{renderInput("Race", "father_race")}
 					{renderInput("Nationality", "father_nationality")}
-					{renderInput("Income", "father_income", "text", "RM5000.00")}
+					{renderInput("Income", "father_income", "text", "3000")}
 					{renderInput("Occupation", "father_occupation")}
 					{renderInput("Office Address", "father_office")}
 					{renderInput("Office Phone Number", "father_office_phone")}
