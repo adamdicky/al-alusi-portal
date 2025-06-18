@@ -39,8 +39,14 @@ export async function POST(req: NextRequest) {
 
 		if (applicationError) throw applicationError;
 
-		const formattedTime = format(new Date(application.testiv_time), "hh:mm a");
+		
+		// const formattedTime = format(new Date(application.testiv_time), "hh:mm:ss");
+		const [hours, minutes] = testiv_time.split(':').map(Number); // or invitation_time
+		const dummyDate = new Date(1970, 0, 1, hours, minutes);
+		const zonedTime = toZonedTime(dummyDate, myTimeZone);
+		const formattedTime = format(zonedTime, 'hh:mm a');
 
+		console.log("Raw time from Supabase:", application.testiv_time); // or .invitation_time
 
 		const { data: father, error: fatherError } = await supabase
 			.from("father")
