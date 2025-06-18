@@ -3,6 +3,11 @@ import { CircleNotch, Notches, X } from "@phosphor-icons/react";
 import { Calendar } from "@/components/ui/calendar";
 import Button from "./Button";
 import { apiFetch } from "@/utils/functions/fetch";
+import { TimePicker } from "@/components/ui/TimePicker";
+import test from "node:test";
+import { isBefore, startOfDay } from "date-fns";
+
+ 
 
 type ModalP3Props = {
 	applicationId: string; // UUID of the application
@@ -15,11 +20,16 @@ export default function ModalP3({ applicationId, staffId, onClose }: ModalP3Prop
 	const [testDate, setTestDate] = useState<Date | undefined>(new Date());
 	console.log(testDate);
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [time, setTime] = useState("10:30:00")
+	const disablePastDates = (date: Date) => {
+		const today = startOfDay(new Date());
+		return isBefore(date, today); // disable any date before today
+	};
 
 	// Called when “Confirm Date” is clicked
 	async function handleConfirmDate() {
-		if (!testDate) {
-			alert("Please pick a test date.");
+		if (!testDate || !time) {
+			alert("Please pick a test date and time.");
 			return;
 		}
 		setIsSubmitting(true);
@@ -27,6 +37,7 @@ export default function ModalP3({ applicationId, staffId, onClose }: ModalP3Prop
 			const payload = {
 				application_id: applicationId,
 				testiv_date: testDate.toISOString(),
+				testiv_time: time,
 			};
 
 			const res = await apiFetch("/api/staff-jabatan/set-schedule", {
@@ -45,7 +56,7 @@ export default function ModalP3({ applicationId, staffId, onClose }: ModalP3Prop
 
 	return (
 		<div className="fixed inset-0 bg-black/75 flex items-center justify-center z-50">
-			<div className="bg-white w-full h-162 max-w-6xl rounded-xl p-2 relative space-y-2">
+			<div className="bg-white w-full h-min max-w-6xl rounded-xl p-3 relative space-y-2">
 				<button type="button" onClick={onClose} className="block ml-auto cursor-pointer">
 					<X size="18" weight="bold" className="text-black" />
 				</button>
@@ -93,8 +104,18 @@ export default function ModalP3({ applicationId, staffId, onClose }: ModalP3Prop
 							mode="single"
 							selected={testDate}
 							onSelect={setTestDate}
+							disabled={disablePastDates}
 							className="rounded-md border flex flex-row justify-center shadow-sm w-full"
 						/>
+						<div className="flex justify-center mt-2">
+							<div className="w-1/3 min-w-[150px]">
+								<TimePicker 
+								time={time}
+								setTime={setTime}
+								/>
+							</div>
+						</div>
+
 					</div>
 				</div>
 

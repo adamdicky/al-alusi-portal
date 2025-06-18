@@ -4,6 +4,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { EmailTemplatePhase4Accept } from "@/components/EmailP4Accept";
 import React from "react";
+import { format } from 'date-fns';
+import { toZonedTime } from 'date-fns-tz';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -14,21 +16,35 @@ export async function POST(req: NextRequest) {
 			return NextResponse.json({ msg: "Unauthorized" }, { status: 401 });
 		}
 
-		const { application_id, invitation_date, testiv_mark } = await req.json();
-		if (!application_id || !invitation_date || !testiv_mark) {
+		const { application_id, invitation_date, testiv_mark, invitation_time } = await req.json();
+		if (!application_id || !invitation_date || !testiv_mark || !invitation_time) {
 			return NextResponse.json({ msg: "Missing fields" }, { status: 400 });
 		}
 
+		// Format the invitation_date to a human-readable string
+		const myTimeZone = 'Asia/Kuala_Lumpur';
+		const localDate = toZonedTime(invitation_date, myTimeZone);
+		const formattedDate = format(localDate, 'EEEE, MMMM d, yyyy'); // example: "June 30, 2025"
+		
+
 		const supabase = await createClient();
 		const now = new Date().toISOString();
-		
+
 		const { data: application, error: applicationError } = await supabase
 			.from("application")
-			.select("emailcontact, father_information, mother_information, student_information")
+			.select("emailcontact, father_information, mother_information, student_information, invitation_time")
 			.eq("id", application_id)
 			.single();
 
 		if (applicationError) throw applicationError;
+
+		
+		// const formattedTime = format(new Date(application.invitation_time), "hh:mm:ss");
+		const [hours, minutes] = invitation_time.split(':').map(Number); // or invitation_time
+		const dummyDate = new Date(1970, 0, 1, hours, minutes);
+		const zonedTime = toZonedTime(dummyDate, myTimeZone);
+		const formattedTime = format(zonedTime, 'hh:mm a');
+		console.log("Raw time from Supabase:", application.invitation_time); // or .invitation_time
 
 		const { data: father, error: fatherError } = await supabase
 			.from("father")
@@ -60,6 +76,7 @@ export async function POST(req: NextRequest) {
 				is_reviewed: true,
 				reviewed_at: now,
 				invitation_date,
+				invitation_time,
 				testiv_mark,
 				phase_status: "accepted",
 				last_updated: now,
@@ -72,7 +89,13 @@ export async function POST(req: NextRequest) {
 			from: 'SIRAJ Al-Alusi <onboarding@resend.dev>',
 			to: [application.emailcontact],
 			subject: 'SIRAJ Al-Alusi: Great news!',
-			react: React.createElement(EmailTemplatePhase4Accept, {fathername: father.name, mothername: mother.name, studentname: student.name, registrationDate: invitation_date}),
+			react: React.createElement(EmailTemplatePhase4Accept, {
+				fathername: father.name, 
+				mothername: mother.name, 
+				studentname: student.name, 
+				registrationDate: formattedDate,
+				registrationTime: formattedTime,
+			}),
 		});
 
 		return NextResponse.json({ msg: "Student approved (invitation date set)" }, { status: 200 });

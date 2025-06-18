@@ -8,7 +8,7 @@ import Button from "@/components/Button";
 import Image from "next/image";
 import { apiFetch } from "@/utils/functions/fetch";
 import { createClient } from "@/utils/supabase-connection/client";
-import { create } from "domain";
+import { User } from "@phosphor-icons/react/dist/ssr";
 
 const supabase = createClient();
 
@@ -123,7 +123,7 @@ export default function CreatePost({ close, postType }: CreatePostProps) {
 				<div className="p-4 rounded-lg border border-gray-200">
 					<div className="flex flex-col mb-6">
 						<div className="flex items-center space-x-3">
-							<div className="w-10 h-10 rounded-full bg-gray-300" />
+							<User size={32} />
 							<div>
 								<p className="font-semibold text-black">{userId}</p>
 								<p className="text-sm text-gray-500">

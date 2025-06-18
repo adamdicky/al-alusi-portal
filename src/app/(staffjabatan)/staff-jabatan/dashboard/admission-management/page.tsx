@@ -111,10 +111,10 @@ export default function StaffJabatanDashboard() {
 						applications.map((app) => (
 							<div
 								key={app.id}
-								className="flex flex-row items-center justify-between bg-white border border-gray-200 px-3 py-1.5 rounded-md w-full"
+								className="flex flex-row items-center justify-between bg-white border border-gray-200 px-5 py-1.5 rounded-md w-full"
 							>
 								<h6 className="font-medium w-160 overflow-hidden text-ellipsis">{app.student?.name}</h6>
-								<div className="flex flex-row items-center gap-1.5 text-gray-500 text-sm">
+								<div className="flex flex-row items-center gap-1.5  text-gray-500 text-sm">
 									<p>
 										{new Intl.DateTimeFormat("en-GB", {
 											day: "2-digit",

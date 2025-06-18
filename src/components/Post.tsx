@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { User } from "@phosphor-icons/react/dist/ssr";
 import Image from "next/image";
 import { Tables } from "@/types/supabase/public.types";
 import { Dialog } from "@headlessui/react";
+import { createClient } from "@/utils/supabase-connection/client";
 
 export default function Post({ post }: { post: Tables<"school_posts"> }) {
 	
@@ -26,13 +27,39 @@ export default function Post({ post }: { post: Tables<"school_posts"> }) {
 		setIsOpen(true);
 	};
 
+	const [authorName, setAuthorName] = useState<string>("");
+	
+	useEffect(() => {
+		async function getAuthorName() {
+			if (!post.author_id) return;
+
+			const supabase = createClient();
+			const { data, error } = await supabase
+				.from("profiles")
+				.select("full_name")
+				.eq("id", post.author_id)
+				.single();
+
+			if (error) {
+				console.error("Error fetching author name:", error);
+				return;
+			}
+
+			if (data?.full_name) {
+				setAuthorName(data.full_name);
+			}
+		}
+
+		getAuthorName();
+	}, []);
+
 	return (
 		<div className=" flex flex-col bg-white p-3 gap-3 rounded-2xl border border-gray-200 w-full">
 			
 			<div className="flex flex-row items-center gap-2">
 				<User size={32} />
 				<div>
-					<h6 className="font-bold">{post.author_id}</h6>
+					<h6 className="font-bold">{authorName}</h6>
 					<div>
 						<h6 className="text-[12px] text-[#909090]">
 							{new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "short" }).format(new Date(post.created_at))}

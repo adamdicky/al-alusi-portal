@@ -1,18 +1,29 @@
 "use client";
 
 import { useState } from "react";
-import { Notches, X } from "@phosphor-icons/react";
+import { Invoice, Notches, X } from "@phosphor-icons/react";
 import Input from "@/components/ui/input";
 import { Calendar } from "@/components/ui/calendar";
 import Button from "./Button";
 import { apiFetch } from "@/utils/functions/fetch";
+import { TimePicker } from "@/components/ui/TimePicker";
+import { isBefore, startOfDay } from "date-fns";
+
+
 
 export default function ModalP2({ applicationId, onClose }: { applicationId: string; onClose: () => void }) {
 	const [testMark, setTestMark] = useState<string>("0");
 	const [date, setDate] = useState<Date | undefined>(new Date());
+	const [time, setTime] = useState("10:30:00")
+	const disablePastDates = (date: Date) => {
+		const today = startOfDay(new Date());
+		return isBefore(date, today); // disable any date before today
+	};
+	
 
 	async function confirmDate() {
 		if (parseInt(testMark) < 40) return alert("Test mark is too low. Please reject the application.");
+		if (!date || !time) return alert("Please select a date and time.");
 
 		try {
 			await apiFetch("/api/staff-jabatan/approve-application", {
@@ -20,6 +31,7 @@ export default function ModalP2({ applicationId, onClose }: { applicationId: str
 				body: JSON.stringify({
 					application_id: applicationId,
 					invitation_date: date,
+					invitation_time: time,
 					testiv_mark: testMark,
 				}),
 			});
@@ -46,7 +58,7 @@ export default function ModalP2({ applicationId, onClose }: { applicationId: str
 
 	return (
 		<div className="fixed inset-0 bg-black/75 flex items-center justify-center z-50">
-			<div className="bg-white w-full h-162 max-w-6xl rounded-xl p-2 relative space-y-2">
+			<div className="bg-white w-full h-min max-w-6xl rounded-xl p-3 relative space-y-2">
 				<button type="button" onClick={onClose} className="block ml-auto cursor-pointer">
 					<X size="18" weight="bold" className="text-black" />
 				</button>
@@ -87,33 +99,39 @@ export default function ModalP2({ applicationId, onClose }: { applicationId: str
 					</div>
 
 					{/* MAIN CONTENT */}
-					<div className="flex flex-col justify-start gap-2 border border-gray-200 rounded-md p-4 w-4/5 max-h-190 overflow-y-auto">
-						<div>
-							<label className="block text-sm font-medium mb-1">Test Mark</label>
-							<Input
-								type="number"
-								placeholder="Enter Test Mark"
-								max={100}
-								maxLength={3}
-								min={0}
-								value={testMark}
-								onChange={(e) => setTestMark(e.target.value)}
-								className="w-full px-3 py-2 rounded-md"
-							/>
-						</div>
-
-						<div>
-							<strong>School & Visit Date</strong>
-						</div>
-						<div className="flex flex-col flex-wrap items-start gap-2 @md:flex-row">
-							<Calendar
-								disabled={parseInt(testMark) < 40}
+					<div className="flex flex-col justify-start gap-y-2 border border-gray-200 rounded-md p-4 w-4/5  overflow-y-auto">
+							<div>
+								<label className="block text-sm font-medium mb-1"><strong>Test Mark</strong></label>
+								<Input
+									type="number"
+									placeholder="Enter Test Mark"
+									max={100}
+									maxLength={3}
+									min={0}
+									value={testMark}
+									onChange={(e) => setTestMark(e.target.value)}
+									className="w-full px-3 py-2 rounded-md"
+								/>
+							</div>
+							<div>
+								<strong>School Registration Date</strong>
+								<Calendar
+								disabled={parseInt(testMark) < 40 || disablePastDates}
+								
 								mode="single"
 								selected={date}
 								onSelect={setDate}
-								className="rounded-md border flex flex-row justify-center shadow-sm w-full"
-							/>
-						</div>
+								className="rounded-md px-2 border flex flex-row justify-center shadow-sm w-full"
+								/>
+							</div>
+							<div className="flex justify-center mt-2">
+								<div className="w-1/3 min-w-[150px]">
+									<TimePicker 
+									time={time}
+									setTime={setTime}
+									/>
+								</div>
+							</div>
 					</div>
 				</div>
 				<div className="flex flex-row justify-end-safe gap-4">

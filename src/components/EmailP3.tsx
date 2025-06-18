@@ -5,15 +5,16 @@ interface EmailTemplateProps {
     mothername?: string;
     studentname?: string;
     testDate?: string;
+    testTime?: string;
 }
 
 export const EmailTemplatePhase3: React.FC<Readonly<EmailTemplateProps>> = ({
-    fathername, mothername, studentname, testDate
+    fathername, mothername, studentname, testDate, testTime
 }) => (
   <div style={{ fontFamily: 'Arial, sans-serif', lineHeight: 1.6 }}>
     <h2>Upcoming Test & Interview – SIRAJ Al-Alusi</h2>
     <p>
-      Greetings <strong>Mr. {fathername}</strong> and <strong>Mrs. {mothername}</strong>. This is to inform you that the school test and interview for <strong>{studentname}</strong> has been scheduled on <strong>{testDate}</strong> at <strong>2PM.</strong>.
+      Greetings <strong>Mr. {fathername}</strong> and <strong>Mrs. {mothername}</strong>. This is to inform you that the school test and interview for <strong>{studentname}</strong> has been scheduled on <strong>{testDate}</strong> at <strong>{testTime}</strong>.
     </p>
     <p>
       Please ensure punctuality and bring the necessary documents such as identity card and such on the test day.
