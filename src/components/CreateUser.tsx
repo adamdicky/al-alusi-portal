@@ -13,9 +13,11 @@ export default function CreateUser({ close }: { close: () => void }) {
 	const [email, setEmail] = useState("");
 	const [fullname, setFullname] = useState("");
 	const [role, setRole] = useState<"teacher" | "admin" | "staff_jabatan">("teacher");
-	const [classroom, setClassroom] = useState<Classroom>();
+	const [classroom, setClassroom] = useState<Classroom>("1-UKM");
 
 	const handleCreate = async () => {
+		if (!classroom || classroom?.length < 0 || role.length < 0 || email.length < 0 || fullname.length < 0) return alert("Please fill all fields");
+
 		try {
 			const response = await apiFetch("/api/auth/create-user", {
 				method: "POST",
