@@ -12,13 +12,15 @@ import { Dialog } from "@headlessui/react";
 import { createClient } from "@/utils/supabase-connection/client";
 
 
-const OpenPost = ({ post, close }: { post: Tables<"school_posts" | "class_posts">; close: () => void }) => {
+const OpenPost = ({ post, close }: { post: Tables<"class_posts">; close: () => void }) => {
 	// State for the remark input
 	const [remarkText, setRemarkText] = useState<string>("");
 	const [authorName, setAuthorName] = useState<string>("");
 
 
 	//Check if this is class_post and if its approved
+	console.log("Incoming post status:", post.status);
+	// Check if the post is approved
 	const isPostApproved = (post as Tables<"class_posts">).status === "approved";
 
 	// Function to handle Make Remark button click
@@ -110,7 +112,7 @@ const OpenPost = ({ post, close }: { post: Tables<"school_posts" | "class_posts"
 
 	return (
 		<div className="fixed inset-0 bg-black/75 flex items-center justify-center z-50">
-			<div className="bg-white w-full max-w-3xl rounded-xl p-2 relative space-y-2">
+			<div className="bg-white w-full max-w-3xl rounded-xl p-2 relative h-min space-y-2">
 				<button type="button" onClick={close} className="block ml-auto cursor-pointer">
 					<X size="18" weight="bold" className="text-black" />
 				</button>

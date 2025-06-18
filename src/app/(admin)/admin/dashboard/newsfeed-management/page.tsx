@@ -154,10 +154,9 @@ export default function page() {
 				</div>
 			</div>
 			{showCreatePost && <CreatePost close={() => setShowCreatePost(false)} postType="school_posts" />}
-			{showPost !== null && showPost.table_name === "school_posts" && (
-				<DeletePost type="school" post={showPost} close={() => setShowPost(null)} />
-			)}
-			{showPost !== null && showPost.table_name === "class_posts" && <OpenPost post={showPost} close={() => setShowPost(null)} />}
+			{showPost !== null && showPost.table_name === "school_posts" && (<DeletePost type="school" post={showPost} close={() => setShowPost(null)} />)}
+			{showPost !== null && showPost.table_name === "class_posts" &&  <OpenPost post={showPost} close={() => setShowPost(null)} />}
+			
 		</main>
 	);
 }
