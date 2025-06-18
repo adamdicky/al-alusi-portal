@@ -9,6 +9,8 @@ import { apiFetch } from "@/utils/functions/fetch";
 import Textarea from "./ui/textarea";
 import Input from "./ui/input";
 import { Dialog } from "@headlessui/react";
+import { createClient } from "@/utils/supabase-connection/client";
+
 
 
 export default function RemarkedPost({
@@ -32,6 +34,9 @@ export default function RemarkedPost({
 
 	const [isOpen, setIsOpen] = useState(false);
 	const [selectedIndex, setSelectedIndex] = useState(0);
+	const [authorName, setAuthorName] = useState<string>("");
+
+	
 
 	const handleImageClick = (index: number) => {
 		setSelectedIndex(index);
@@ -51,6 +56,27 @@ export default function RemarkedPost({
 			}
 		}
 
+		async function getAuthorName() {
+			if (!post.author_id) return;
+
+			const supabase = createClient();
+			const { data, error } = await supabase
+				.from("profiles")
+				.select("full_name")
+				.eq("id", post.author_id)
+				.single();
+
+			if (error) {
+				console.error("Error fetching author name:", error);
+				return;
+			}
+
+			if (data?.full_name) {
+				setAuthorName(data.full_name);
+			}
+		}
+
+		getAuthorName();
 		getRemarkData();
 	}, []);
 
@@ -104,7 +130,7 @@ export default function RemarkedPost({
 						<div className="flex flex-row items-center gap-2 w-full">
 							<User size={32} />
 							<div>
-								<h6 className="font-semibold w-44 overflow-hidden text-ellipsis whitespace-nowrap">Mr. Fairouz</h6>
+								<h6 className="font-semibold w-44 overflow-hidden text-ellipsis whitespace-nowrap">{authorName}</h6>
 								<div className="flex flex-row items-center gap-2">
 									<h6 className="text-[12px] text-[#909090]">
 										{new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "short" }).format(new Date(post.created_at))}

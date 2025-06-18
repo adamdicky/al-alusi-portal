@@ -5,10 +5,11 @@ interface EmailTemplateProps {
     mothername?: string;
     studentname?: string;
     registrationDate?: string;
+    registrationTime?: string;
 }
 
 export const EmailTemplatePhase4Accept: React.FC<Readonly<EmailTemplateProps>> = ({
-    fathername, mothername, studentname, registrationDate
+    fathername, mothername, studentname, registrationDate, registrationTime
 }) => (
   <div style={{ fontFamily: 'Arial, sans-serif', lineHeight: 1.6 }}>
     <h2>Great News from SIRAJ Al-Alusi!</h2>
@@ -16,7 +17,7 @@ export const EmailTemplatePhase4Accept: React.FC<Readonly<EmailTemplateProps>> =
        Greetings <strong>Mr. {fathername}</strong> and <strong>Mrs. {mothername}</strong>. We are pleased to inform you that <strong>{studentname}</strong> has passed the test and interview! 🎉
     </p>
     <p>
-      The school registration is scheduled on <strong>{registrationDate}</strong> at <strong>9AM</strong>. Further instructions will be provided soon.
+      The school registration is scheduled on <strong>{registrationDate}</strong> at <strong>{registrationTime}</strong>. Further instructions will be provided soon.
     </p>
     <p>
       Welcome to the SIRAJ Al-Alusi!

@@ -5,13 +5,18 @@ import { User, X } from "@phosphor-icons/react";
 import Button from "@/components/Button";
 import { Tables } from "@/types/supabase/public.types";
 import Image from "next/image";
+import { useEffect } from "react";
 import { apiFetch } from "@/utils/functions/fetch";
 import Textarea from "./ui/textarea";
 import { Dialog } from "@headlessui/react";
+import { createClient } from "@/utils/supabase-connection/client";
+
 
 const OpenPost = ({ post, close }: { post: Tables<"school_posts" | "class_posts">; close: () => void }) => {
 	// State for the remark input
 	const [remarkText, setRemarkText] = useState<string>("");
+	const [authorName, setAuthorName] = useState<string>("");
+
 
 	//Check if this is class_post and if its approved
 	const isPostApproved = (post as Tables<"class_posts">).status === "approved";
@@ -58,6 +63,29 @@ const OpenPost = ({ post, close }: { post: Tables<"school_posts" | "class_posts"
 		}
 	}
 
+	useEffect(() => {
+		const fetchAuthorName = async () => {
+			if (!post.author_id) return;
+
+			const supabase = createClient();
+			const { data, error } = await supabase
+				.from("profiles")
+				.select("full_name")
+				.eq("id", post.author_id)
+				.single();
+
+			if (error) {
+				console.error("Error fetching author name:", error);
+				return;
+			}
+
+			if (data?.full_name) setAuthorName(data.full_name);
+		};
+
+		fetchAuthorName();
+	}, [post.author_id]);
+
+
 	const [isOpen, setIsOpen] = useState(false);
 	const [selectedIndex, setSelectedIndex] = useState(0);
 	
@@ -93,7 +121,7 @@ const OpenPost = ({ post, close }: { post: Tables<"school_posts" | "class_posts"
 						<div className="flex flex-row items-center gap-2 w-full">
 							<User size={32} />
 							<div>
-								<h6 className="font-semibold w-44 overflow-hidden text-ellipsis whitespace-nowrap">{post.author_id}</h6>
+								<h6 className="font-semibold w-44 overflow-hidden text-ellipsis whitespace-nowrap">{authorName}</h6>
 								<div className="flex flex-row items-center gap-2">
 									<h6 className="text-[12px] text-[#909090]">
 										{new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "short" }).format(new Date(post.created_at))}
