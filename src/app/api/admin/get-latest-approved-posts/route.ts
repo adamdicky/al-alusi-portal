@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
 
     const { data, error }: PostgrestResponse<any> = await supabase
       .from("class_posts")
-      .select("id, title, content, created_at, author_id, profiles(full_name), images_id, images_path, bucket_id")
+      .select("id, title, content, created_at, status, author_id, profiles(full_name), images_id, images_path, bucket_id")
       .eq("status", "approved")
       .order("created_at", { ascending: sort === "asc" });
 
