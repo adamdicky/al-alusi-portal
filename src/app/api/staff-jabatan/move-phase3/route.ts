@@ -72,7 +72,7 @@ export async function POST(req: NextRequest) {
 		await resend.emails.send({
 			from: 'SIRAJ Al-Alusi <onboarding@resend.dev>',
 			to: [application.emailcontact],
-			subject: 'SIRAJ Al-Alusi: Application is accepted.',
+			subject: 'SIRAJ Al-Alusi: Test & interview scheduled!',
 			react: React.createElement(EmailTemplatePhase2Accept, {fathername: father.name, mothername: mother.name, studentname: student.name}),
 		});
 
