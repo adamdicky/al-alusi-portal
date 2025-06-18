@@ -113,10 +113,10 @@ export default function AdmissionFormPage() {
 		);
 	}
 
-	const renderInput = (label: string, name: keyof Form, type = "text") => (
+	const renderInput = (label: string, name: keyof Form, type = "text", placeholder="") => (
 		<div className="flex flex-col">
 			<label className="font-medium mb-1">{label}</label>
-			<Input name={name} value={form[name]} onChange={handleChange} type={type} />
+			<Input name={name} value={form[name]} onChange={handleChange} type={type} placeholder={placeholder}/>
 		</div>
 	);
 
@@ -139,19 +139,19 @@ export default function AdmissionFormPage() {
 						))}
 					</select>
 				</div>
-				{renderInput("For Year", "for_year")}
-				{renderInput("Requested School", "requested_school")}
-				{renderInput("Email Contact", "email_contact")}
+				{renderInput("For Year", "for_year", "text", "2020")}
+				{renderInput("Requested School", "requested_school", "text","SIRAJ Al-Alusi")}
+				{renderInput("Email Contact", "email_contact", "text", "abc@gmail.com")}
 			</div>
 
 			<fieldset className="border-t pt-6">
 				<legend className="text-center font-semibold text-lg">Father/Guardian Information</legend>
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
 					{renderInput("Name", "father_name")}
-					{renderInput("Phone Number", "father_phone")}
+					{renderInput("Phone Number", "father_phone", "text", "012-3456789")}
 					{renderInput("Race", "father_race")}
 					{renderInput("Nationality", "father_nationality")}
-					{renderInput("Income", "father_income")}
+					{renderInput("Income", "father_income", "text", "RM5000.00")}
 					{renderInput("Occupation", "father_occupation")}
 					{renderInput("Office Address", "father_office")}
 					{renderInput("Office Phone Number", "father_office_phone")}
@@ -163,10 +163,10 @@ export default function AdmissionFormPage() {
 				<legend className="text-center font-semibold text-lg">Mother/Guardian Information</legend>
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
 					{renderInput("Name", "mother_name")}
-					{renderInput("Phone Number", "mother_phone")}
+					{renderInput("Phone Number", "mother_phone", "text", "012-3456789")}
 					{renderInput("Race", "mother_race")}
 					{renderInput("Nationality", "mother_nationality")}
-					{renderInput("Income", "mother_income")}
+					{renderInput("Income", "mother_income", "text", "RM5000.00")}
 					{renderInput("Occupation", "mother_occupation")}
 					{renderInput("Office Address", "mother_office")}
 					{renderInput("Office Phone Number", "mother_office_phone")}
@@ -183,10 +183,10 @@ export default function AdmissionFormPage() {
 					{renderInput("Gender", "gender")}
 					{renderInput("Nationality", "nationality")}
 					{renderInput("Date of Birth", "date_of_birth", "date")}
-					{renderInput("Place of Birth", "place_of_birth")}
+					{renderInput("Place of Birth", "place_of_birth", "text", "Hospital Name, State")}
 					{renderInput("Kindergarten Name", "kindergarten")}
 					{renderInput("Primary School Name", "primary_school")}
-					{renderInput("Primary School Session", "primary_session")}
+					{renderInput("Primary School Session", "primary_session", "text", "Morning/Afternoon")}
 				</div>
 			</fieldset>
 
