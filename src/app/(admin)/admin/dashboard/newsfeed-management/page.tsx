@@ -9,13 +9,31 @@ import { apiFetch } from "@/utils/functions/fetch";
 import DeletePost from "@/components/DeletePost";
 import OpenPost from "@/components/OpenPost";
 
+type PostWithTableName =
+  | (ClassPostWithAuthor & { table_name: "class_posts" })
+  | (SchoolPostWithAuthor & { table_name: "school_posts" });
+
+
+type ClassPostWithAuthor = Tables<"class_posts"> & {
+  profiles: {
+	full_name: string;
+  } | null;
+};
+
+type SchoolPostWithAuthor = Tables<"school_posts"> & {
+  profiles: {
+	full_name: string;
+  } | null;
+};
+
+
 function PostListItem({
 	post,
 	showPost,
 	tableName,
 }: {
-	post: Tables<"school_posts" | "class_posts">;
-	showPost: (x: null | (Tables<"school_posts" | "class_posts"> & { table_name: "school_posts" | "class_posts" })) => void;
+	post: ClassPostWithAuthor | SchoolPostWithAuthor;
+	showPost: (x: null | PostWithTableName) => void;
 	tableName: "school_posts" | "class_posts";
 }) {
 	const iamgeUrl = post.images_path && post.images_path.length > 0 && post.bucket_id 
@@ -24,15 +42,15 @@ function PostListItem({
 	
 	return (
 		<div className="flex flex-row items-center justify-between bg-white border border-gray-200 px-3 py-1.5 rounded-md w-full">
-			<h6 className="font-medium w-44 overflow-hidden text-ellipsis whitespace-nowrap">{post.title}</h6>
-			<div className="flex flex-row items-center gap-1.5 text-gray-500 text-sm">
+			<h6 className="font-medium w-60 overflow-hidden text-ellipsis whitespace-nowrap">{post.title}</h6>
+			<div className="flex flex-row justify-center items-center gap-1.5 text-gray-500 text-sm">
 				<p>{new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "short" }).format(new Date(post.created_at))}</p>
-				<p className="w-16 line-clamp-1">{post.author_id}</p>
+				<p className="w-40 flex flex-row justify-center">{post.profiles?.full_name ?? "Unknown"}</p>
 				<button
 					type="button"
 					onClick={() =>
 						showPost({
-							...post,
+							...post as ClassPostWithAuthor,
 							table_name: tableName,
 						})
 					}
@@ -46,16 +64,20 @@ function PostListItem({
 }
 
 export default function page() {
-	const [showPost, setShowPost] = useState<null | (Tables<"school_posts" | "class_posts"> & { table_name: "class_posts" | "school_posts" })>(null);
+	// const [showPost, setShowPost] = useState<null | (Tables<"school_posts" | "class_posts"> & { table_name: "class_posts" | "school_posts" })>(null);
+	const [showPost, setShowPost] = useState<null | PostWithTableName>(null);
 	const [showCreatePost, setShowCreatePost] = useState<boolean>(false);
-	const [schoolNewsfeed, setSchoolNewsfeed] = useState<Tables<"school_posts">[]>();
-	const [pendingPosts, setPendingPosts] = useState<Tables<"class_posts">[]>([]); //for pending posts
-	const [approvedPosts, setApprovedPosts] = useState<Tables<"class_posts">[]>([]); //for approved posts
+	const [schoolNewsfeed, setSchoolNewsfeed] = useState<SchoolPostWithAuthor[]>();
+	const [pendingPosts, setPendingPosts] = useState<ClassPostWithAuthor[]>();
+	const [approvedPosts, setApprovedPosts] = useState<ClassPostWithAuthor[]>();
+	// const [schoolNewsfeed, setSchoolNewsfeed] = useState<Tables<"school_posts">[]>();
+	// const [pendingPosts, setPendingPosts] = useState<Tables<"class_posts">[]>([]); //for pending posts
+	// const [approvedPosts, setApprovedPosts] = useState<Tables<"class_posts">[]>([]); //for approved posts
 
 	useEffect(() => {
 		async function getPosts() {
 			try {
-				const posts: Tables<"class_posts">[] = await apiFetch("/api/newsfeed/school/post/get-newsfeed?sort=desc", {
+				const posts: SchoolPostWithAuthor[] = await apiFetch("/api/newsfeed/school/post/get-newsfeed?sort=desc", {
 					method: "GET",
 				});
 
@@ -67,7 +89,7 @@ export default function page() {
 
 		async function getPendingPosts() {
 			try {
-				const data = await apiFetch("/api/admin/get-pending-posts", {
+				const data: ClassPostWithAuthor[] = await apiFetch("/api/admin/get-pending-posts", {
 					method: "GET",
 				});
 				setPendingPosts(data);
@@ -78,7 +100,7 @@ export default function page() {
 
 		async function getApprovedPosts() {
 			try {
-				const data = await apiFetch("/api/admin/get-latest-approved-posts", {
+				const data: ClassPostWithAuthor[] = await apiFetch("/api/admin/get-latest-approved-posts", {
 					method: "GET",
 				});
 				setApprovedPosts(data);
@@ -98,7 +120,7 @@ export default function page() {
 		<main className="bg-white col-span-4 grid grid-cols-2 grid-rows-2 grid-flow-row gap-4 p-4 border border-gray-200 rounded-lg">
 			<div className="flex flex-col w-full space-y-2 my-3">
 				<div className="flex flex-row items-center justify-between">
-					<h5 className="font-semibold">Pending School Newsfeed</h5>
+					<h5 className="font-semibold">Pending Class Newsfeed</h5>
 				</div>
 				<div className="flex flex-col  items-center gap-3 h-77 bg-off-white border border-gray-200 p-2 rounded-lg overflow-y-scroll">
 					{pendingPosts &&

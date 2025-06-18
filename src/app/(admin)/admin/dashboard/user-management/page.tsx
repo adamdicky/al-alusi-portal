@@ -58,7 +58,7 @@ export default function Page() {
 	}
 
 	return (
-		<main className="col-span-4 flex flex-col gap-4 p-4 bg-white border border-gray-200 rounded-lg">
+		<main className="col-span-4 flex flex-col min-h-[80vh] gap-4 p-4 bg-white border border-gray-200 rounded-lg">
 			{/* Header */}
 			<div className="flex flex-row items-center justify-between">
 				<h5 className="font-semibold text-lg">User Management</h5>
@@ -86,7 +86,7 @@ export default function Page() {
 			</div>
 
 			{/* User List */}
-			<div className="flex flex-col gap-3 h-full overflow-y-scroll bg-gray-50 border border-gray-200 p-3 rounded-lg">
+			<div className="flex flex-col flex-grow gap-3 h-full overflow-y-scroll bg-gray-50 border border-gray-200 p-3 rounded-lg">
 				{filtered.length > 0 &&
 					filtered.map((user) => (
 						<div

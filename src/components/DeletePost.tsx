@@ -1,12 +1,16 @@
 "use client";
 
 import React, { useState } from "react";
+import { useEffect } from "react";
 import { User, X } from "@phosphor-icons/react";
 import Button from "@/components/Button";
 import { Tables } from "@/types/supabase/public.types";
 import Image from "next/image";
 import { apiFetch } from "@/utils/functions/fetch";
 import { Dialog } from "@headlessui/react";
+import { createClient } from "@/utils/supabase-connection/client";
+
+
 
 const DeletePost = ({ post, type, close }: { post: Tables<"school_posts" | "class_posts">; type: "school" | "class"; close: () => void }) => {
 	async function deletePost(e: React.MouseEvent<HTMLButtonElement>) {
@@ -22,8 +26,31 @@ const DeletePost = ({ post, type, close }: { post: Tables<"school_posts" | "clas
 		}
 	};
 
+	useEffect(() => {
+	const fetchAuthorName = async () => {
+		if (!post.author_id) return;
+
+		const supabase = createClient();
+		const { data, error } = await supabase
+			.from("profiles") 
+			.select("full_name")
+			.eq("id", post.author_id)
+			.single();
+
+		if (error) {
+			console.error("Error fetching author name:", error);
+			return;
+		}
+
+		if (data?.full_name) setAuthorName(data.full_name);
+	};
+
+	fetchAuthorName();
+}, [post.author_id]);
+
 	const [isOpen, setIsOpen] = useState(false);
 	const [selectedIndex, setSelectedIndex] = useState(0);
+	const [authorName, setAuthorName] = useState<string>("");
 	
 	const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 	
@@ -54,7 +81,7 @@ const DeletePost = ({ post, type, close }: { post: Tables<"school_posts" | "clas
 					<div className="flex flex-row items-center gap-2 w-full">
 						<User size={32} />
 						<div>
-							<h6 className="font-semibold w-44 overflow-hidden text-ellipsis whitespace-nowrap">{post.author_id}</h6>
+							<h6 className="font-semibold w-44 overflow-hidden text-ellipsis whitespace-nowrap">{authorName}</h6>
 							<div className="flex flex-row items-center gap-2">
 								<h6 className="text-[12px] text-[#909090]">
 									{new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "short" }).format(new Date(post.created_at))}

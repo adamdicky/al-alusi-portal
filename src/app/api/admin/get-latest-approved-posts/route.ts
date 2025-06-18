@@ -10,9 +10,9 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.nextUrl);
     const sort = searchParams.get("sort") || "desc";
 
-    const { data, error }: PostgrestResponse<Tables<"class_posts">> = await supabase
+    const { data, error }: PostgrestResponse<any> = await supabase
       .from("class_posts")
-      .select()
+      .select("id, title, content, created_at, author_id, profiles(full_name), images_id, images_path, bucket_id")
       .eq("status", "approved")
       .order("created_at", { ascending: sort === "asc" });
 

@@ -17,7 +17,11 @@ export async function GET(request: Request) {
 		const orderParam = url.searchParams.get("order") === "asc" ? "asc" : "desc";
 
 		const supabase = await createClient();
-		let query = supabase.from("application").select();
+		// let query = supabase.from("application").select();
+		let query = supabase
+			.from("application")
+			.select("*, student(name)");
+
 
 		if (statusFilter && statusFilter !== "All") {
 			query = query.eq("phase_status", statusFilter);

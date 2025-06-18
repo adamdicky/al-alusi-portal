@@ -56,7 +56,7 @@ export async function updateSession(request: NextRequest) {
 	}
 
 	//? User Authenticated
-	if (user && (pathname.startsWith("/admin/login") || pathname.startsWith("/newsfeed"))) {
+	if (user && (pathname.startsWith("/admin/login") || pathname.startsWith("/newsfeed") && pathname !== "/newsfeed/school" && pathname !== "/newsfeed/class")) {
 		console.log("Authenticated... re-routing");
 
 		const url = request.nextUrl.clone();
