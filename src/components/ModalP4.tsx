@@ -110,7 +110,7 @@ export default function ModalP2({ applicationId, onClose }: { applicationId: str
 									min={0}
 									value={testMark}
 									onChange={(e) => setTestMark(e.target.value)}
-									className="w-full px-3 py-2 rounded-md"
+									className="w-full h-12 px-4 py-5 rounded-md"
 								/>
 							</div>
 							<div>
