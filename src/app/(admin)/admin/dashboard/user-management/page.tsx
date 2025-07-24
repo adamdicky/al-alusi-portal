@@ -11,7 +11,7 @@ type User = {
 	role: string;
 };
 
-type RoleFilter = "All" | "Teacher" | "Admin" | "Staff Jabatan";
+type RoleFilter = "All" | "Teacher" | "Admin" | "staff_jabatan";
 
 export default function Page() {
 	const [users, setUsers] = useState<User[]>([]);
@@ -30,6 +30,7 @@ export default function Page() {
 				console.log(users);
 
 				setUsers(users);
+				console.log(users)
 				setFiltered(roleFilter === "All" ? users : users.filter((u) => u.role.toLowerCase() === roleFilter.toLowerCase()));
 			} catch (error) {
 				console.error(error);
@@ -70,7 +71,7 @@ export default function Page() {
 						onChange={(e) => setRoleFilter(e.target.value as RoleFilter)}
 					>
 						{["All", "Teacher", "Admin", "Staff Jabatan"].map((role, i) => (
-							<option key={i}>{role}</option>
+							<option key={i} value={role === "Staff Jabatan" ? "staff_jabatan" : role}>{role}</option>
 						))}
 					</select>
 
