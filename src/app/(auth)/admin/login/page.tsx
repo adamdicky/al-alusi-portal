@@ -37,7 +37,8 @@ export default function page() {
 	return (
 		<section className="grid grid-flow-col grid-cols-5 gap-0 w-full h-full bg-white border border-gray-200 rounded-lg overflow-hidden">
 			<div className="col-span-1 bg-[url(/login-sidebar.png)] w-full h-full bg-no-repeat" />
-			<div className="col-span-4 flex flex-col items-center justify-start mt-16 gap-6 w-full h-full">
+			<div className="col-span-4 flex flex-col items-center pb-40 justify-center mt-16 gap-6 w-full h-full">
+
 				<div className="space-y-2 text-center w-min">
 					<h3 className="font-semibold w-max">Staff & Admin Login</h3>
 					<p className="font-medium">This portal is exclusively for SIRAJ Al-Alusi authorized personnel.</p>
@@ -75,6 +76,7 @@ export default function page() {
 						</a>
 					</div>
 				</form>
+
 			</div>
 		</section>
 	);
