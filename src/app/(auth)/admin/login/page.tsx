@@ -74,7 +74,12 @@ export default function page() {
 						<a href="mailto:someemail@gmail.com" className="underline font-medium">
 							Contact SIRAJ Al-Alusi Admin
 						</a>
+
 					</div>
+					<div className="text-sm text-center text-gray-500">
+						<a href="/newsfeed/school" className="underline font-small">Go to Al-Alusi Portal</a>
+					</div>
+
 				</form>
 
 			</div>
