@@ -13,9 +13,9 @@ const DeletePostforTeacher = ({ post, type, close }: { post: Tables<"school_post
     async function deletePost(e: React.MouseEvent<HTMLButtonElement>) {
         e.preventDefault();
         try {
-                await apiFetch(`/api/newsfeed/class/post/delete/`, {
-                        method: "POST",
-                        body: JSON.stringify({id: post.id}),
+            await apiFetch(`/api/newsfeed/class/post/delete/`, {
+                method: "POST",
+                body: JSON.stringify({ id: post.id }),
             });
 
             close();
@@ -27,26 +27,26 @@ const DeletePostforTeacher = ({ post, type, close }: { post: Tables<"school_post
     const [isOpen, setIsOpen] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [authorName, setAuthorName] = useState<string>("");
-    
-    
+
+
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-    
+
     //get bucketid and imagepath frmo post
     const bucket = post.bucket_id;
     const imagePaths = post.images_path ?? [];
-    
+
     //take only 3 image for preview
     const previewImages = imagePaths.slice(0, 3);
-    
+
     const handleImageClick = (index: number) => {
         setSelectedIndex(index);
         setIsOpen(true);
     };
 
     const imageUrl =
-    post.images_path && post.images_path.length > 0 && post.bucket_id
-        ? `https://apkeqsxxyrlsariwtaow.supabase.co/storage/v1/object/public/${post.bucket_id}/${post.images_path[0]}`
-        : "/example pic siraj al alusi.jpg";
+        post.images_path && post.images_path.length > 0 && post.bucket_id
+            ? `https://apkeqsxxyrlsariwtaow.supabase.co/storage/v1/object/public/${post.bucket_id}/${post.images_path[0]}`
+            : "/example pic siraj al alusi.jpg";
 
     useEffect(() => {
         async function getAuthorName() {
@@ -71,9 +71,9 @@ const DeletePostforTeacher = ({ post, type, close }: { post: Tables<"school_post
 
         getAuthorName();
     }, []);
-    
+
     return (
-        <div className="fixed inset-0 bg-black/75 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/75 overflow-y-auto flex items-start justify-center py-10 z-50">
             <div className="bg-white w-full max-w-2xl rounded-xl p-2 relative space-y-2">
                 <button type="button" onClick={close} className="block ml-auto cursor-pointer">
                     <X size="18" weight="bold" className="text-black" />
@@ -100,7 +100,7 @@ const DeletePostforTeacher = ({ post, type, close }: { post: Tables<"school_post
                         <h6>
                             <b>{post.title}</b>
                         </h6>
-                        <p>{post.content}</p>
+                        <p className="whitespace-pre-line">{post.content}</p>
                     </div>
 
                     <div className="relative w-full h-60 overflow-hidden rounded-md">
@@ -116,11 +116,11 @@ const DeletePostforTeacher = ({ post, type, close }: { post: Tables<"school_post
                                         <Image
                                             //Construct full image URL from bucket + path
                                             src={`${supabaseUrl}/storage/v1/object/public/${bucket}/${path}`}
-                                            alt={`Post image ${index+1}`}
+                                            alt={`Post image ${index + 1}`}
                                             fill
                                             className="object-cover"
                                         />
-                                        {/* if 3rd image and more image exist (which cant be) show "show more" */}	
+                                        {/* if 3rd image and more image exist (which cant be) show "show more" */}
                                         {index === 2 && imagePaths.length > 3 && (
                                             <div
                                                 className="absolute inset-0 flex items-center justify-center text-white hover:text-2xl font-bold text-lg bg-black/60 cursor-pointer"
@@ -133,7 +133,7 @@ const DeletePostforTeacher = ({ post, type, close }: { post: Tables<"school_post
                                 ))}
                             </div>
 
-                        )}	
+                        )}
                         {/* open fullscreen modal image viewer */}
                         <Dialog open={isOpen} onClose={() => setIsOpen(false)} className="relative z-50">
                             <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
@@ -145,7 +145,7 @@ const DeletePostforTeacher = ({ post, type, close }: { post: Tables<"school_post
                                         >
                                             Close ✕
                                         </button>
-                                    </div>	
+                                    </div>
                                     {/* main image */}
                                     <Image
                                         src={`${supabaseUrl}/storage/v1/object/public/${bucket}/${imagePaths[selectedIndex]}`}
@@ -153,7 +153,7 @@ const DeletePostforTeacher = ({ post, type, close }: { post: Tables<"school_post
                                         width={800}
                                         height={600}
                                         className="object-contain w-full"
-                                    />	
+                                    />
                                     {/* dots to switch image display */}
                                     <div className="flex justify-center gap-2 mt-4">
                                         {imagePaths.map((_, i) => (
@@ -164,12 +164,12 @@ const DeletePostforTeacher = ({ post, type, close }: { post: Tables<"school_post
                                             />
                                         ))}
                                     </div>
-                                </div>	
+                                </div>
                             </div>
                         </Dialog>
                     </div>
                 </div>
-                
+
                 <Button text="Delete Post" color="danger" onClick={deletePost} className="block ml-auto font-semibold text-sm" />
             </div>
         </div>

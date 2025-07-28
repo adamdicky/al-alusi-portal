@@ -90,28 +90,28 @@ const OpenPost = ({ post, close }: { post: Tables<"class_posts">; close: () => v
 
 	const [isOpen, setIsOpen] = useState(false);
 	const [selectedIndex, setSelectedIndex] = useState(0);
-	
+
 	const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-	
+
 	//get bucketid and imagepath frmo post
 	const bucket = post.bucket_id;
 	const imagePaths = post.images_path ?? [];
-	
+
 	//take only 3 image for preview
 	const previewImages = imagePaths.slice(0, 3);
-	
+
 	const handleImageClick = (index: number) => {
 		setSelectedIndex(index);
 		setIsOpen(true);
 	};
 
 	const imageUrl =
-	post.images_path && post.images_path.length > 0 && post.bucket_id
-		? `https://apkeqsxxyrlsariwtaow.supabase.co/storage/v1/object/public/${post.bucket_id}/${post.images_path[0]}`
-		: "/example pic siraj al alusi.jpg";
+		post.images_path && post.images_path.length > 0 && post.bucket_id
+			? `https://apkeqsxxyrlsariwtaow.supabase.co/storage/v1/object/public/${post.bucket_id}/${post.images_path[0]}`
+			: "/example pic siraj al alusi.jpg";
 
 	return (
-		<div className="fixed inset-0 bg-black/75 flex items-center justify-center z-50">
+		<div className="fixed inset-0 bg-black/75 overflow-y-auto flex items-start justify-center py-10 z-50">
 			<div className="bg-white w-full max-w-3xl rounded-xl p-2 relative h-min space-y-2">
 				<button type="button" onClick={close} className="block ml-auto cursor-pointer">
 					<X size="18" weight="bold" className="text-black" />
@@ -141,11 +141,11 @@ const OpenPost = ({ post, close }: { post: Tables<"class_posts">; close: () => v
 							<h6>
 								<b>{post.title}</b>
 							</h6>
-							<p>{post.content}</p>
+							<p className="whitespace-pre-line">{post.content}</p>
 						</div>
 
 						<div className="relative w-full h-80 overflow-hidden rounded-md">
-							{/* <Image src={imageUrl} alt="post image" fill className="object-cover" /> */}
+
 							{/* IMAGE FNCTION STARTS HERE */}
 							{imagePaths.length > 0 && (
 								<div className="grid grid-cols-3 gap-2 w-full rounded-xl overflow-hidden h-60 relative">
@@ -155,9 +155,9 @@ const OpenPost = ({ post, close }: { post: Tables<"class_posts">; close: () => v
 											onClick={() => handleImageClick(index)}
 										>
 											<Image
-												
+
 												src={`${supabaseUrl}/storage/v1/object/public/${bucket}/${path}`}
-												alt={`Post image ${index+1}`}
+												alt={`Post image ${index + 1}`}
 												fill
 												className="object-cover"
 											/>
@@ -173,7 +173,7 @@ const OpenPost = ({ post, close }: { post: Tables<"class_posts">; close: () => v
 										</div>
 									))}
 								</div>
-								
+
 							)}
 							{/* open fullscreen modal image viewer */}
 							<Dialog open={isOpen} onClose={() => setIsOpen(false)} className="relative z-50">

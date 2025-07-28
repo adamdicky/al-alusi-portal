@@ -36,7 +36,7 @@ export default function RemarkedPost({
 	const [selectedIndex, setSelectedIndex] = useState(0);
 	const [authorName, setAuthorName] = useState<string>("");
 
-	
+
 
 	const handleImageClick = (index: number) => {
 		setSelectedIndex(index);
@@ -101,16 +101,16 @@ export default function RemarkedPost({
 	}
 
 	async function deletePost() {
-	try {
-		await apiFetch(`/api/newsfeed/class/post/delete/`, {
-			method: "POST",
-			body: JSON.stringify({id: post.id}),
-		});
-		close(); // closes the modal after deletion
-	} catch (error) {
-		console.error("Failed to delete post:", error);
+		try {
+			await apiFetch(`/api/newsfeed/class/post/delete/`, {
+				method: "POST",
+				body: JSON.stringify({ id: post.id }),
+			});
+			close(); // closes the modal after deletion
+		} catch (error) {
+			console.error("Failed to delete post:", error);
+		}
 	}
-}
 
 
 	const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -119,95 +119,95 @@ export default function RemarkedPost({
 
 	return (
 		<>
-		<div className="fixed inset-0 bg-black/75 flex items-center justify-center z-50">
-			<div className="relative bg-white w-full max-w-3xl rounded-xl p-2 space-y-2">
-				<button type="button" onClick={close} className="block ml-auto cursor-pointer">
-					<X size="18" weight="bold" className="text-black" />
-				</button>
+			<div className="fixed inset-0 bg-black/75 flex items-center justify-center z-50">
+				<div className="relative bg-white w-full max-w-3xl rounded-xl p-2 space-y-2">
+					<button type="button" onClick={close} className="block ml-auto cursor-pointer">
+						<X size="18" weight="bold" className="text-black" />
+					</button>
 
-				<div className="flex flex-row border border-gray-200 rounded-md p-4 space-y-6">
-					<div className="flex flex-col gap-4 p-3 w-full">
-						<div className="flex flex-row items-center gap-2 w-full">
-							<User size={32} />
-							<div>
-								<h6 className="font-semibold w-44 overflow-hidden text-ellipsis whitespace-nowrap">{authorName}</h6>
-								<div className="flex flex-row items-center gap-2">
-									<h6 className="text-[12px] text-[#909090]">
-										{new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "short" }).format(new Date(post.created_at))}
-									</h6>
-									<h6 className="text-[12px] text-[#909090]">
-										{new Intl.DateTimeFormat("en-GB", { hour: "numeric", minute: "2-digit", hour12: true })
-											.format(new Date(post.created_at))
-											.toLocaleLowerCase()}
-									</h6>
+					<div className="flex flex-row border border-gray-200 rounded-md p-4 space-y-6">
+						<div className="flex flex-col gap-4 p-3 w-full">
+							<div className="flex flex-row items-center gap-2 w-full">
+								<User size={32} />
+								<div>
+									<h6 className="font-semibold w-44 overflow-hidden text-ellipsis whitespace-nowrap">{authorName}</h6>
+									<div className="flex flex-row items-center gap-2">
+										<h6 className="text-[12px] text-[#909090]">
+											{new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "short" }).format(new Date(post.created_at))}
+										</h6>
+										<h6 className="text-[12px] text-[#909090]">
+											{new Intl.DateTimeFormat("en-GB", { hour: "numeric", minute: "2-digit", hour12: true })
+												.format(new Date(post.created_at))
+												.toLocaleLowerCase()}
+										</h6>
+									</div>
 								</div>
 							</div>
-						</div>
 
-						<div className="">
-							<label className="block text-sm font font-medium text-black mb-1">Title</label>
-							<Input
-								type="text"
-								value={title}
-								onChange={(e) => setTitle(e.target.value)}
-								placeholder="Enter title"
-								className="w-full px-3 py-2 rounded-md"
-							/>
-						</div>
-
-						<div className="">
-							<label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-							<Textarea
-								value={description}
-								onChange={(e) => setDescription(e.target.value)}
-								placeholder="Enter description"
-								rows={4}
-								className="w-full px-3 py-2 border rounded-md resize-none"
-							/>
-						</div>
-
-						{/* Image Preview */}
-						{imagePaths.length > 0 && (
-							<div className="w-full">
-								<label className="block text-sm font-medium text-gray-700 mb-2">Images</label>
-								<div className="grid grid-cols-3 gap-2 w-full rounded-xl overflow-hidden h-60 relative">
-									{previewImages.map((path, index) => (
-										<div
-											key={path}
-											className={`relative w-full h-full ${index === 2 && imagePaths.length > 3 ? "brightness-85" : ""} cursor-pointer`}
-											onClick={() => handleImageClick(index)}
-										>
-											<Image
-												src={`${supabaseUrl}/storage/v1/object/public/${bucket}/${path}`}
-												alt={`Post image ${index + 1}`}
-												fill
-												className="object-cover"
-											/>
-											{index === 2 && imagePaths.length > 3 && (
-												<div className="absolute inset-0 flex items-center justify-center bg-black/40 text-white text-lg font-bold">
-													+{imagePaths.length - 3} more
-												</div>
-											)}
-										</div>
-									))}
-								</div>
+							<div className="">
+								<label className="block text-sm font font-medium text-black mb-1">Title</label>
+								<Input
+									type="text"
+									value={title}
+									onChange={(e) => setTitle(e.target.value)}
+									placeholder="Enter title"
+									className="w-full px-3 py-2 rounded-md "
+								/>
 							</div>
-						)}
+
+							<div className="">
+								<label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+								<Textarea
+									value={description}
+									onChange={(e) => setDescription(e.target.value)}
+									placeholder="Enter description"
+									rows={4}
+									className="w-full px-3 py-2 border rounded-md resize-none"
+								/>
+							</div>
+
+							{/* Image Preview */}
+							{imagePaths.length > 0 && (
+								<div className="w-full">
+									<label className="block text-sm font-medium text-gray-700 mb-2">Images</label>
+									<div className="grid grid-cols-3 gap-2 w-full rounded-xl overflow-hidden h-60 relative">
+										{previewImages.map((path, index) => (
+											<div
+												key={path}
+												className={`relative w-full h-full ${index === 2 && imagePaths.length > 3 ? "brightness-85" : ""} cursor-pointer`}
+												onClick={() => handleImageClick(index)}
+											>
+												<Image
+													src={`${supabaseUrl}/storage/v1/object/public/${bucket}/${path}`}
+													alt={`Post image ${index + 1}`}
+													fill
+													className="object-cover"
+												/>
+												{index === 2 && imagePaths.length > 3 && (
+													<div className="absolute inset-0 flex items-center justify-center bg-black/40 text-white text-lg font-bold">
+														+{imagePaths.length - 3} more
+													</div>
+												)}
+											</div>
+										))}
+									</div>
+								</div>
+							)}
+						</div>
+
+						<Textarea placeholder="Type your remark here..." value={remarkText} className="w-44 text-black resize-none" disabled />
 					</div>
 
-					<Textarea placeholder="Type your remark here..." value={remarkText} className="w-44 text-black resize-none" disabled />
-				</div>
-
-				{/* Action Buttons */}
-				<div className="flex justify-end gap-2">
-					<Button text="Delete Post" color="danger" onClick={deletePost} className="block ml-auto font-semibold text-sm" />
-					<Button text="Update Post" color="dark-blue" onClick={updatePost} className="font-semibold text-sm" />
+					{/* Action Buttons */}
+					<div className="flex justify-end gap-2">
+						<Button text="Delete Post" color="danger" onClick={deletePost} className="block ml-auto font-semibold text-sm" />
+						<Button text="Update Post" color="dark-blue" onClick={updatePost} className="font-semibold text-sm" />
+					</div>
 				</div>
 			</div>
-		</div>
 
-		{/* Fullscreen Image Viewer */}
-		<Dialog open={isOpen} onClose={() => setIsOpen(false)} className="relative z-50">
+			{/* Fullscreen Image Viewer */}
+			<Dialog open={isOpen} onClose={() => setIsOpen(false)} className="relative z-50">
 				<div className="fixed inset-0 bg-black/50 flex items-center justify-center">
 					<div className="bg-white p-4 rounded-xl max-w-3xl w-full max-h-[80vh] overflow-auto">
 						<div className="flex justify-end">
@@ -239,7 +239,7 @@ export default function RemarkedPost({
 					</div>
 				</div>
 			</Dialog>
-	</>
-		
+		</>
+
 	);
 }

@@ -27,52 +27,52 @@ const DeletePost = ({ post, type, close }: { post: Tables<"school_posts" | "clas
 	};
 
 	useEffect(() => {
-	const fetchAuthorName = async () => {
-		if (!post.author_id) return;
+		const fetchAuthorName = async () => {
+			if (!post.author_id) return;
 
-		const supabase = createClient();
-		const { data, error } = await supabase
-			.from("profiles") 
-			.select("full_name")
-			.eq("id", post.author_id)
-			.single();
+			const supabase = createClient();
+			const { data, error } = await supabase
+				.from("profiles")
+				.select("full_name")
+				.eq("id", post.author_id)
+				.single();
 
-		if (error) {
-			console.error("Error fetching author name:", error);
-			return;
-		}
+			if (error) {
+				console.error("Error fetching author name:", error);
+				return;
+			}
 
-		if (data?.full_name) setAuthorName(data.full_name);
-	};
+			if (data?.full_name) setAuthorName(data.full_name);
+		};
 
-	fetchAuthorName();
-}, [post.author_id]);
+		fetchAuthorName();
+	}, [post.author_id]);
 
 	const [isOpen, setIsOpen] = useState(false);
 	const [selectedIndex, setSelectedIndex] = useState(0);
 	const [authorName, setAuthorName] = useState<string>("");
-	
+
 	const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-	
+
 	//get bucketid and imagepath frmo post
 	const bucket = post.bucket_id;
 	const imagePaths = post.images_path ?? [];
-	
+
 	//take only 3 image for preview
 	const previewImages = imagePaths.slice(0, 3);
-	
+
 	const handleImageClick = (index: number) => {
 		setSelectedIndex(index);
 		setIsOpen(true);
 	};
 
 	const imageUrl =
-	post.images_path && post.images_path.length > 0 && post.bucket_id
-		? `https://apkeqsxxyrlsariwtaow.supabase.co/storage/v1/object/public/${post.bucket_id}/${post.images_path[0]}`
-		: "/example pic siraj al alusi.jpg";
+		post.images_path && post.images_path.length > 0 && post.bucket_id
+			? `https://apkeqsxxyrlsariwtaow.supabase.co/storage/v1/object/public/${post.bucket_id}/${post.images_path[0]}`
+			: "/example pic siraj al alusi.jpg";
 
 	return (
-		<div className="fixed inset-0 bg-black/75 flex items-center justify-center z-50">
+		<div className="fixed inset-0 bg-black/75 overflow-y-auto flex items-start py-10 justify-center z-50">
 			<div className="bg-white w-full max-w-2xl rounded-xl p-2 relative space-y-2">
 				<button type="button" onClick={close} className="block ml-auto cursor-pointer">
 					<X size="18" weight="bold" className="text-black" />
@@ -99,7 +99,7 @@ const DeletePost = ({ post, type, close }: { post: Tables<"school_posts" | "clas
 						<h6>
 							<b>{post.title}</b>
 						</h6>
-						<p>{post.content}</p>
+						<p className="whitespace-pre-line">{post.content}</p>
 					</div>
 
 					<div className="relative w-full h-60 overflow-hidden rounded-md">
@@ -115,11 +115,11 @@ const DeletePost = ({ post, type, close }: { post: Tables<"school_posts" | "clas
 										<Image
 											//Construct full image URL from bucket + path
 											src={`${supabaseUrl}/storage/v1/object/public/${bucket}/${path}`}
-											alt={`Post image ${index+1}`}
+											alt={`Post image ${index + 1}`}
 											fill
 											className="object-cover"
 										/>
-										{/* if 3rd image and more image exist (which cant be) show "show more" */}	
+										{/* if 3rd image and more image exist (which cant be) show "show more" */}
 										{index === 2 && imagePaths.length > 3 && (
 											<div
 												className="absolute inset-0 flex items-center justify-center text-white hover:text-2xl font-bold text-lg bg-black/60 cursor-pointer"
@@ -132,7 +132,7 @@ const DeletePost = ({ post, type, close }: { post: Tables<"school_posts" | "clas
 								))}
 							</div>
 
-						)}	
+						)}
 						{/* open fullscreen modal image viewer */}
 						<Dialog open={isOpen} onClose={() => setIsOpen(false)} className="relative z-50">
 							<div className="fixed inset-0 bg-black/50 flex items-center justify-center">
@@ -144,7 +144,7 @@ const DeletePost = ({ post, type, close }: { post: Tables<"school_posts" | "clas
 										>
 											Close ✕
 										</button>
-									</div>	
+									</div>
 									{/* main image */}
 									<Image
 										src={`${supabaseUrl}/storage/v1/object/public/${bucket}/${imagePaths[selectedIndex]}`}
@@ -152,7 +152,7 @@ const DeletePost = ({ post, type, close }: { post: Tables<"school_posts" | "clas
 										width={800}
 										height={600}
 										className="object-contain w-full"
-									/>	
+									/>
 									{/* dots to switch image display */}
 									<div className="flex justify-center gap-2 mt-4">
 										{imagePaths.map((_, i) => (
@@ -163,12 +163,12 @@ const DeletePost = ({ post, type, close }: { post: Tables<"school_posts" | "clas
 											/>
 										))}
 									</div>
-								</div>	
+								</div>
 							</div>
 						</Dialog>
 					</div>
 				</div>
-				
+
 				<Button text="Delete Post" color="danger" onClick={deletePost} className="block ml-auto font-semibold text-sm" />
 			</div>
 		</div>

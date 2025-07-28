@@ -8,7 +8,7 @@ import { Dialog } from "@headlessui/react";
 import { createClient } from "@/utils/supabase-connection/client";
 
 export default function Post({ post }: { post: Tables<"school_posts"> }) {
-	
+
 	//modal for view selected image
 	const [isOpen, setIsOpen] = useState(false);
 	const [selectedIndex, setSelectedIndex] = useState(0);
@@ -28,7 +28,7 @@ export default function Post({ post }: { post: Tables<"school_posts"> }) {
 	};
 
 	const [authorName, setAuthorName] = useState<string>("");
-	
+
 	useEffect(() => {
 		async function getAuthorName() {
 			if (!post.author_id) return;
@@ -55,7 +55,7 @@ export default function Post({ post }: { post: Tables<"school_posts"> }) {
 
 	return (
 		<div className=" flex flex-col bg-white p-3 gap-3 rounded-2xl border border-gray-200 w-full">
-			
+
 			<div className="flex flex-row items-center gap-2">
 				<User size={32} />
 				<div>
@@ -75,7 +75,7 @@ export default function Post({ post }: { post: Tables<"school_posts"> }) {
 
 			<div className="text-justify">
 				<h6><b>{post.title}</b></h6>
-				<p>{post.content}</p>
+				<p className="whitespace-pre-line">{post.content}</p>
 			</div>
 
 			{/* IMAGE FNCTION STARTS HERE */}
@@ -89,7 +89,7 @@ export default function Post({ post }: { post: Tables<"school_posts"> }) {
 							<Image
 								//Construct full image URL from bucket + path
 								src={`${supabaseUrl}/storage/v1/object/public/${bucket}/${path}`}
-								alt={`Post image ${index+1}`}
+								alt={`Post image ${index + 1}`}
 								fill
 								className="object-cover"
 							/>
@@ -106,7 +106,7 @@ export default function Post({ post }: { post: Tables<"school_posts"> }) {
 						</div>
 					))}
 				</div>
-				
+
 			)}
 
 			{/* open fullscreen modal image viewer */}
@@ -145,7 +145,7 @@ export default function Post({ post }: { post: Tables<"school_posts"> }) {
 
 				</div>
 			</Dialog>
-			
+
 		</div>
 	);
 }
